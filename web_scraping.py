@@ -13,17 +13,23 @@ resources_tab.click()
 
 time.sleep(10)
 
-neuron_specific_marker_genes = driver.find_element_by_xpath('//a[@href="'+"https://wormguides.org/neuron-specific-marker-genes/"+'"]')
-time.sleep()
-neuron_specific_marker_genes.click()
+neuron_specific_marker_genes = driver.find_element_by_xpath('//a[@title="Neuron-Specific Marker Genes"]')
 
+time.sleep(10)
+neuron_specific_marker_genes.click()
+print("a")
 time.sleep(10)
 
 
-#search = driver.find_element_by_name("q")
-#search.clear()
-#search.send_keys("*")
-#search.send_keys(Keys.RETURN)
+promoters = driver.find_element_by_xpath('//a[@href="'+"http://promoters.wormguides.org/"+'"]')
+promoters.click()
+
+time.sleep(5)
+
+search = driver.find_element_by_name("q")
+search.clear()
+search.send_keys("*")
+search.send_keys(Keys.RETURN)
 
 time.sleep(10)
 
