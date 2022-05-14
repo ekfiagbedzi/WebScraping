@@ -1,5 +1,8 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 import time
 
 # load chrome driver
@@ -17,7 +20,6 @@ neuron_specific_marker_genes = driver.find_element_by_xpath('//a[@title="Neuron-
 
 time.sleep(10)
 neuron_specific_marker_genes.click()
-print("a")
 time.sleep(10)
 
 
@@ -31,14 +33,21 @@ search.clear()
 search.send_keys("*")
 search.send_keys(Keys.RETURN)
 
-time.sleep(10)
+try:
+    element = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located(by=By.CLASS_NAME, value="results_container"))
+    print(element)
+finally:
+    driver.quit()
 
 class Scrapper:
 
-    def __init__ (self):
-        pass
+    def __init__ (self, driver, address):
+        self.address = address
+        self.driver = driver
+        
 
-    def scroll():
+    def click(self, element):
         pass
 
     def next_page():
