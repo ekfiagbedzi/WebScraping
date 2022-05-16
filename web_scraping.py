@@ -35,8 +35,11 @@ search.send_keys(Keys.RETURN)
 
 try:
     element = WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located(by=By.CLASS_NAME, value="results_container"))
-    print(element)
+        EC.presence_of_element_located((By.CLASS_NAME, "results_container")))
+    classes = driver.find_elements(by=By.CLASS_NAME, value="result_container")
+    for cl in classes:
+        ccl = cl.find_element(by=By.TAG_NAME, value="a")
+    print(ccl.get_attribute("href"))
 finally:
     driver.quit()
 
@@ -55,6 +58,3 @@ class Scrapper:
 
     def search():
         pass
-
-
-
