@@ -52,19 +52,47 @@ except:
 
 class Scrapper:
 
-    def __init__ (self, driver, address):
+    def __init__ (self, url, address, PATH):
         self.address = address
-        self.driver = driver
-        
+        self.url = url
+        self.PATH = PATH
+        self.driver = webdriver.Chrome(self.PATH)
 
-    def click(self, element):
-        pass
+    def load_webpage(self):
+        return self.driver.get(self.url)
 
-    def next_page():
-        pass
+    def find_element(self, by=None, value=None):
+        try:
+            element = WebDriverWait(self.driver, timeout=10).until(
+                EC.presence_of_all_elements_located((by, value)))
 
-    def search():
-        pass
+        except:
+            self.driver.quit()
+
+    def generate_element_list(
+        self, by=By.CLASS_NAME, value=None, timeout=10):
+        try:
+            elements = WebDriverWait(self.driver, timeout).until(
+                EC.presence_of_all_elements_located((by, value)))
+
+        except:
+            self.driver.quit()
+
+        return elements
+
+    def extract_elements_from_list(self, list, by=None, value=None, attribute=None, timeout=10):
+        links = []
+        for element in list:
+            try:
+                expression_detail = WebDriverWait(self.driver, timeout).until(
+                    EC.presence_of_element_located((by, value)))
+                link = expression_detail.get_attribute(attribute)
+                links.append(link)
+
+            except:
+                self.driver.quit()
+            
+        return links
 
 
 
