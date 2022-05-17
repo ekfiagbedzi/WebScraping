@@ -9,7 +9,6 @@ from selenium.webdriver.support import expected_conditions as EC
 
 # load chrome driver
 PATH = "/Users/s2124052/Downloads/chromedriver"
-driver = webdriver.Chrome(PATH)
 
 class Scrapper:
 
@@ -66,5 +65,6 @@ class Scrapper:
             
         return links
 
-
-
+if __name__ == "__main__":
+    worm_scrapper = Scrapper(url="https://wormguides.org/", PATH=PATH)
+    
