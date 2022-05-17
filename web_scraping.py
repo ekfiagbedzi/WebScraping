@@ -11,65 +11,37 @@ from selenium.webdriver.support import expected_conditions as EC
 PATH = "/Users/s2124052/Downloads/chromedriver"
 driver = webdriver.Chrome(PATH)
 
-# load webpage
-driver.get("https://wormguides.org/")
-resources_tab = driver.find_element(
-    by=By.XPATH, value='//a[@href="'+"https://wormguides.org/resources/"+'"]')
-resources_tab.click()
-
-time.sleep(10)
-
-neuron_specific_marker_genes = driver.find_element(
-    by=By.XPATH, value='//a[@title="Neuron-Specific Marker Genes"]')
-
-time.sleep(10)
-neuron_specific_marker_genes.click()
-time.sleep(10)
-
-
-promoters = driver.find_element(
-    by=By.XPATH, value='//a[@href="'+"http://promoters.wormguides.org/"+'"]')
-promoters.click()
-
-time.sleep(5)
-
-search = driver.find_element(by=By.NAME, value="q")
-search.clear()
-search.send_keys("*")
-search.send_keys(Keys.RETURN)
-
-try:
-    elements = WebDriverWait(driver, 10).until(
-        EC.presence_of_all_elements_located((By.CLASS_NAME, "result_container")))
-    expression_detail_links = []
-    for element in elements:
-        expression_detail = element.find_element(by=By.TAG_NAME, value="span")
-        expression_detail_link = expression_detail.get_attribute("href")
-        expression_detail_links.append(expression_detail_link)
-
-except:
-    driver.quit()
-
 class Scrapper:
 
-    def __init__ (self, url, address, PATH):
-        self.address = address
-        self.url = url
+    def __init__ (self, url, PATH):
         self.PATH = PATH
+        self.url = url
         self.driver = webdriver.Chrome(self.PATH)
 
     def load_webpage(self):
-        return self.driver.get(self.url)
+        self.driver.get(self.url)
+
+    def click(self, by=None, value=None):
+        element = self.find_element(by, value)
+        element.click()
+
+    def search(self, input_text="", by=None, value=None):
+        element = self.find_element(by, value)
+        element.clear()
+        element.send_keys(input_text)
+        element.send_keys(Keys.RETURN)
 
     def find_element(self, by=None, value=None):
         try:
             element = WebDriverWait(self.driver, timeout=10).until(
-                EC.presence_of_all_elements_located((by, value)))
+                EC.presence_of_element_located((by, value)))
 
         except:
             self.driver.quit()
 
-    def generate_element_list(
+        return element
+
+    def find_elements(
         self, by=By.CLASS_NAME, value=None, timeout=10):
         try:
             elements = WebDriverWait(self.driver, timeout).until(
@@ -84,9 +56,9 @@ class Scrapper:
         links = []
         for element in list:
             try:
-                expression_detail = WebDriverWait(self.driver, timeout).until(
+                member = WebDriverWait(self.driver, timeout).until(
                     EC.presence_of_element_located((by, value)))
-                link = expression_detail.get_attribute(attribute)
+                link = member.get_attribute(attribute)
                 links.append(link)
 
             except:
