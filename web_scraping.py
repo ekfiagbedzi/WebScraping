@@ -1,6 +1,8 @@
 # python in-built libraries
 import time
 
+import uuid
+
 # selenium functions
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -89,6 +91,11 @@ def scrape_worm_guides():
     details_list = worm_scrapper.find_elements(By.TAG_NAME, "span")
     expression_details_list = worm_scrapper.extract_elements_from_list(details_list, By.TAG_NAME, "a")
     expression_details_links = worm_scrapper.get_element_attribute_from_list(expression_details_list, "href")
+    unique_ids = []
+    uuids = []
+    for expression_details_link in expression_details_links:
+        unique_ids.append(expression_details_link.split("?pid=")[1])
+        uuids.append(str(uuid.uuid4()))
 
 
 if __name__ == "__main__":

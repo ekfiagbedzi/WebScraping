@@ -8,6 +8,7 @@ To demonstrate how to use this class, I will use it scrape data from the website
 To run this script, use a python environment with the folowing libraries installed;
 selenium         4.1.5
 Python           3.9.12
+uuid             1.30
 
 ## imports
 The following libraries and packages were installed
