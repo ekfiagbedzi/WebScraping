@@ -33,6 +33,14 @@ class Scrapper:
     def get_element_attribute(self, element, attribute):
         return element.get_attribute(attribute)
 
+    def get_element_attribute_from_list(self, list, attribute):
+        attribute_list = []
+        for member in list:
+            link = self.get_element_attribute(member, attribute)
+            attribute_list.append(link)
+
+        return attribute_list
+
 
     def find_element(self, by=None, value=None, attribute=None, timeout=10):
         if by == By.XPATH:
@@ -64,7 +72,7 @@ class Scrapper:
         if by == By.XPATH:
             value = '//a[@{}="{}"]'.format(attribute, value)
         for element in list:
-            link = element.find_element(by, value).get_attribute(attribute)
+            link = element.find_element(by, value)
             links.append(link)
             
         return links
@@ -76,10 +84,10 @@ def scrape_worm_guides():
     worm_scrapper.click(By.XPATH, "Neuron-Specific Marker Genes", attribute="title")
     worm_scrapper.click(By.XPATH, "http://promoters.wormguides.org/", attribute="href")
     worm_scrapper.search("*", By.NAME, "q")
-    lists = worm_scrapper.find_elements(By.CLASS_NAME, "result_container")
-    print(lists[0])
-    lll = worm_scrapper.extract_elements_from_list(lists, By.TAG_NAME, "span", attribute="href")
-    print(lll)
+    details_list = worm_scrapper.find_elements(By.TAG_NAME, "span")
+    expression_details_list = worm_scrapper.extract_elements_from_list(details_list, By.TAG_NAME, "a")
+    expression_details_links = worm_scrapper.get_element_attribute_from_list(expression_details_list, "href")
+
 
 if __name__ == "__main__":
     scrape_worm_guides()
