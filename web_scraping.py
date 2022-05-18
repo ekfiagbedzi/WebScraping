@@ -34,6 +34,12 @@ class Scrapper:
         element.send_keys(input_text)
         element.send_keys(Keys.RETURN)
 
+    def forward(self):
+        self.driver.forward()
+
+    def back(self):
+        self.driver.back()
+
     def get_element_attribute(self, element, attribute):
         return element.get_attribute(attribute)
 
@@ -96,6 +102,10 @@ def scrape_worm_guides():
     for expression_details_link in expression_details_links:
         unique_ids.append(expression_details_link.split("?pid=")[1])
         uuids.append(str(uuid.uuid4()))
+
+    return expression_details_links, unique_ids, uuids
+
+
 
 
 if __name__ == "__main__":
