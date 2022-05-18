@@ -87,6 +87,10 @@ class Scrapper:
             
         return links
 
+def get_text_from_details_page():
+    worm = Scrapper("http://promoters.wormguides.org/detailedExpression.php?pid=2", PATH)
+    print(worm.find_element(By.CLASS_NAME, value="table"))
+
 def scrape_worm_guides():
     worm_scrapper = Scrapper(url="https://wormguides.org/", PATH=PATH)
     worm_scrapper.load_webpage()
@@ -109,4 +113,4 @@ def scrape_worm_guides():
 
 
 if __name__ == "__main__":
-    scrape_worm_guides()
+    get_text_from_details_page()
