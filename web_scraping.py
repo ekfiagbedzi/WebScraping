@@ -87,17 +87,24 @@ class Scrapper:
             
         return links
 
-def get_text_from_details_page():
-    worm = Scrapper("http://promoters.wormguides.org/detailedExpression.php?pid=2", PATH)
-    print(worm.find_element(By.CLASS_NAME, value="table"))
-
-def scrape_worm_guides():
+def navigate_to_results_page():
     worm_scrapper = Scrapper(url="https://wormguides.org/", PATH=PATH)
     worm_scrapper.load_webpage()
     worm_scrapper.click(By.XPATH, "https://wormguides.org/resources/", "href")
     worm_scrapper.click(By.XPATH, "Neuron-Specific Marker Genes", attribute="title")
     worm_scrapper.click(By.XPATH, "http://promoters.wormguides.org/", attribute="href")
     worm_scrapper.search("*", By.NAME, "q")
+    worm_scrapper.click(By.XPATH, "http://promoters.wormguides.org/detailedExpression.php?pid=2", "href")
+
+
+    return worm_scrapper
+
+def get_text_from_details_page():
+    worm_scrapper = navigate_to_results_page()
+    worm_scrapper.click(By.XPATH, "http://promoters.wormguides.org/detailedExpression.php?pid=2", "href")
+
+def scrape_worm_guides():
+    worm_scrapper = navigate_to_results_page()
     details_list = worm_scrapper.find_elements(By.TAG_NAME, "span")
     expression_details_list = worm_scrapper.extract_elements_from_list(details_list, By.TAG_NAME, "a")
     expression_details_links = worm_scrapper.get_element_attribute_from_list(expression_details_list, "href")
@@ -106,11 +113,10 @@ def scrape_worm_guides():
     for expression_details_link in expression_details_links:
         unique_ids.append(expression_details_link.split("?pid=")[1])
         uuids.append(str(uuid.uuid4()))
-
-    return expression_details_links, unique_ids, uuids
+    return expression_details_links, expression_details_list, unique_ids, uuids
 
 
 
 
 if __name__ == "__main__":
-    get_text_from_details_page()
+    navigate_to_results_page()
