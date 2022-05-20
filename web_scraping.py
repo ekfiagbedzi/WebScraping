@@ -52,7 +52,7 @@ class Scrapper:
         return attribute_list
 
 
-    def find_element(self, by=None, value=None, attribute=None, timeout=10):
+    def find_element(self, by=None, value=None, attribute=None, timeout=20):
         if by == By.XPATH:
             value = '//a[@{}="{}"]'.format(attribute, value)
 
@@ -94,14 +94,17 @@ def navigate_to_results_page():
     worm_scrapper.click(By.XPATH, "Neuron-Specific Marker Genes", attribute="title")
     worm_scrapper.click(By.XPATH, "http://promoters.wormguides.org/", attribute="href")
     worm_scrapper.search("*", By.NAME, "q")
-    worm_scrapper.click(By.XPATH, "http://promoters.wormguides.org/detailedExpression.php?pid=2", "href")
-
+    worm_scrapper.click(By.TAG_NAME, "a")
+    #worm_scrapper.click(By.XPATH, "http://detailedExpression.php?pid=2", "href")
+    #worm_scrapper.click(By.XPATH, "http://promoters.wormguides.org/detailedExpression.php?pid=2", "href")
 
     return worm_scrapper
 
 def get_text_from_details_page():
-    worm_scrapper = navigate_to_results_page()
-    worm_scrapper.click(By.XPATH, "http://promoters.wormguides.org/detailedExpression.php?pid=2", "href")
+    worm_scrapper = Scrapper("http://promoters.wormguides.org/detailedExpression.php?pid=2", PATH)
+    worm_scrapper.load_webpage()
+    
+    
 
 def scrape_worm_guides():
     worm_scrapper = navigate_to_results_page()
@@ -119,4 +122,4 @@ def scrape_worm_guides():
 
 
 if __name__ == "__main__":
-    navigate_to_results_page()
+    get_text_from_details_page()
