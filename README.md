@@ -22,4 +22,6 @@ It gives access to methods such as `accept_all_cookies`, `click`, `search`, `for
 ## Use Example for crapping promoter information on wormguides.org
 To scrape all promoter information on wormguides website, run `web_scrapping.py` file in the environment containing the libraries as shown in the **environment setup section**
 
+Access the first details page
+
 
