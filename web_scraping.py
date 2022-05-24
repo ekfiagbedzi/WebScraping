@@ -1,5 +1,6 @@
 # python in-built libraries
 import time
+import urllib
 
 import uuid
 
@@ -125,7 +126,17 @@ def get_strain_info():
         worm_scrapper.load_webpage()
         result_body = worm_scrapper.find_element(By.CLASS_NAME, "result_body")
         strain_info.append(result_body.text)
-    print(strain_info[1])
+    return strain_info
+
+def download_images():
+    images = []
+    worm_scrapper = navigate_to_results_page()
+    image_tags = worm_scrapper.find_elements(By.TAG_NAME, "img")
+    for tag in image_tags:
+        image_url = str(tag.get_attribute("src"))
+        urllib.request.urlretrieve(image_url, )
+        images.append(tag.get_attribute("src"))
+    print(images[1])
 
 def get_links_to_all_details_pages():
     worm_scrapper = navigate_to_results_page()
@@ -144,4 +155,4 @@ def get_links_to_all_details_pages():
 
 
 if __name__ == "__main__":
-    get_strain_info()
+    download_images()
