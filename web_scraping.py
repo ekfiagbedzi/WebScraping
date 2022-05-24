@@ -95,19 +95,21 @@ def navigate_to_results_page():
     worm_scrapper.click(By.XPATH, "http://promoters.wormguides.org/", attribute="href")
     worm_scrapper.search("*", By.NAME, "q")
     worm_scrapper.click(By.TAG_NAME, "a")
-    #worm_scrapper.click(By.XPATH, "http://detailedExpression.php?pid=2", "href")
-    #worm_scrapper.click(By.XPATH, "http://promoters.wormguides.org/detailedExpression.php?pid=2", "href")
-
+    
     return worm_scrapper
 
 def get_text_from_details_page():
-    worm_scrapper = Scrapper("http://promoters.wormguides.org/strainInfo.php?pid=2", PATH)
-    worm_scrapper.load_webpage()
-    ele = worm_scrapper.find_element(By.CLASS_NAME, "result_body")
-    print(ele.text)
-    #ee = worm_scrapper.find_element(By.XPATH, "strainInfo.php?pid=2", "href")
-    #ee.click()
-def scrape_worm_guides():
+    expression_details_links, _, _, _, = get_links_to_all_details_pages()
+    result_bodies = []
+    for url in expression_details_links:
+        worm_scrapper = Scrapper(url, PATH)
+        worm_scrapper.load_webpage()
+        result_body = worm_scrapper.find_element(By.CLASS_NAME, "result_body")
+        result_bodies.append(result_body.text)
+    print(result_bodies[1])
+
+
+def get_links_to_all_details_pages():
     worm_scrapper = navigate_to_results_page()
     details_list = worm_scrapper.find_elements(By.TAG_NAME, "span")
     expression_details_list = worm_scrapper.extract_elements_from_list(details_list, By.TAG_NAME, "a")
@@ -118,6 +120,7 @@ def scrape_worm_guides():
         unique_ids.append(expression_details_link.split("?pid=")[1])
         uuids.append(str(uuid.uuid4()))
     return expression_details_links, expression_details_list, unique_ids, uuids
+
 
 
 
