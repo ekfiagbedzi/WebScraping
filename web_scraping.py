@@ -101,11 +101,12 @@ def navigate_to_results_page():
     return worm_scrapper
 
 def get_text_from_details_page():
-    worm_scrapper = Scrapper("http://promoters.wormguides.org/detailedExpression.php?pid=2", PATH)
+    worm_scrapper = Scrapper("http://promoters.wormguides.org/strainInfo.php?pid=2", PATH)
     worm_scrapper.load_webpage()
-    
-    
-
+    ele = worm_scrapper.find_element(By.CLASS_NAME, "result_body")
+    print(ele.text)
+    #ee = worm_scrapper.find_element(By.XPATH, "strainInfo.php?pid=2", "href")
+    #ee.click()
 def scrape_worm_guides():
     worm_scrapper = navigate_to_results_page()
     details_list = worm_scrapper.find_elements(By.TAG_NAME, "span")
