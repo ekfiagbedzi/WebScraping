@@ -106,6 +106,26 @@ def get_promoter_preview_info():
         promoter_previews.append(detail.text)
     return promoter_previews
 
+def get_expression_details():
+    expression_details_links, _, _, _, = get_links_to_all_details_pages()
+    expression_details = []
+    for url in expression_details_links:
+        worm_scrapper = Scrapper(url, PATH)
+        worm_scrapper.load_webpage()
+        result_body = worm_scrapper.find_element(By.CLASS_NAME, "result_body")
+        expression_details.append(result_body.text)
+    return expression_details
+
+def get_strain_info():
+    expression_details_links, _, _, _, = get_links_to_all_details_pages()
+    strain_info = []
+    for url in expression_details_links:
+        url = url.replace("detailedExpression", "strainInfo")
+        worm_scrapper = Scrapper(url, PATH)
+        worm_scrapper.load_webpage()
+        result_body = worm_scrapper.find_element(By.CLASS_NAME, "result_body")
+        strain_info.append(result_body.text)
+    print(strain_info[1])
 
 def get_links_to_all_details_pages():
     worm_scrapper = navigate_to_results_page()
@@ -124,4 +144,4 @@ def get_links_to_all_details_pages():
 
 
 if __name__ == "__main__":
-    get_promoter_preview_info()
+    get_strain_info()
