@@ -98,15 +98,13 @@ def navigate_to_results_page():
     
     return worm_scrapper
 
-def get_text_from_details_page():
-    expression_details_links, _, _, _, = get_links_to_all_details_pages()
-    result_bodies = []
-    for url in expression_details_links:
-        worm_scrapper = Scrapper(url, PATH)
-        worm_scrapper.load_webpage()
-        result_body = worm_scrapper.find_element(By.CLASS_NAME, "result_body")
-        result_bodies.append(result_body.text)
-    print(result_bodies[1])
+def get_promoter_preview_info():
+    promoter_previews = []
+    worm_scrapper = navigate_to_results_page()
+    result_bodies = worm_scrapper.find_elements(By.CLASS_NAME, "result_body")
+    for detail in result_bodies:
+        promoter_previews.append(detail.text)
+    return promoter_previews
 
 
 def get_links_to_all_details_pages():
@@ -126,4 +124,4 @@ def get_links_to_all_details_pages():
 
 
 if __name__ == "__main__":
-    get_text_from_details_page()
+    get_promoter_preview_info()
