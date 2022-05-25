@@ -1,6 +1,6 @@
 # python in-built libraries
 import time
-import urllib
+import urllib.request as req
 
 import uuid
 
@@ -95,7 +95,7 @@ def navigate_to_results_page():
     worm_scrapper.click(By.XPATH, "Neuron-Specific Marker Genes", attribute="title")
     worm_scrapper.click(By.XPATH, "http://promoters.wormguides.org/", attribute="href")
     worm_scrapper.search("*", By.NAME, "q")
-    worm_scrapper.click(By.TAG_NAME, "a")
+    #worm_scrapper.click(By.TAG_NAME, "a")
     
     return worm_scrapper
 
@@ -133,8 +133,10 @@ def download_images():
     worm_scrapper = navigate_to_results_page()
     image_tags = worm_scrapper.find_elements(By.TAG_NAME, "img")
     for tag in image_tags:
+
         image_url = str(tag.get_attribute("src"))
-        urllib.request.urlretrieve(image_url, )
+        req.urlretrieve(
+            image_url, "/Users/s2124052/Downloads/WormBaseImages/{}.gif".format(image_url.split("=")[1]))
         images.append(tag.get_attribute("src"))
     print(images[1])
 
