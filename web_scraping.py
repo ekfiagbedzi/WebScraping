@@ -1,5 +1,6 @@
 # python in-built libraries
 import time
+import re
 import urllib.request as req
 
 import uuid
@@ -155,9 +156,16 @@ def get_links_to_all_details_pages():
     return expression_details_links, expression_details_list, unique_ids, uuids
 
 
+def get_single_expression_details():
+    expression_details_links, _, _, _, = get_links_to_all_details_pages()
+    url = expression_details_links[1]
+    worm_scrapper = Scrapper(url, PATH)
+    worm_scrapper.load_webpage()
+    result_body = worm_scrapper.find_element(By.CLASS_NAME, "result_body")
+    return result_body.text
 
 
 
 if __name__ == "__main__":
-    _, _, _, uuids = get_links_to_all_details_pages()
-    image_urls = download_images(uuids)
+    details = get_single_expression_details()
+    print(re.split("Temporal\sexpression\spattern|Detailed\sexpression\spatterns", str(details)))
