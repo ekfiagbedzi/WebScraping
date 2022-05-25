@@ -128,17 +128,19 @@ def get_strain_info():
         strain_info.append(result_body.text)
     return strain_info
 
-def download_images():
-    images = []
+def download_images(uuids=[]):
+    image_urls = []
+    index_count = 0
     worm_scrapper = navigate_to_results_page()
     image_tags = worm_scrapper.find_elements(By.TAG_NAME, "img")
     for tag in image_tags:
-
         image_url = str(tag.get_attribute("src"))
         req.urlretrieve(
-            image_url, "/Users/s2124052/Downloads/WormBaseImages/{}.gif".format(image_url.split("=")[1]))
-        images.append(tag.get_attribute("src"))
-    print(images[1])
+            image_url, "/Users/s2124052/Downloads/WormBaseImages/{}.gif".format(uuids[index_count]))
+        image_urls.append(image_url)
+        index_count += 1
+    return image_urls
+
 
 def get_links_to_all_details_pages():
     worm_scrapper = navigate_to_results_page()
@@ -157,4 +159,5 @@ def get_links_to_all_details_pages():
 
 
 if __name__ == "__main__":
-    download_images()
+    _, _, _, uuids = get_links_to_all_details_pages()
+    image_urls = download_images(uuids)
