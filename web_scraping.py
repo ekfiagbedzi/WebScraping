@@ -102,11 +102,19 @@ def navigate_to_results_page():
 
 def get_promoter_preview_info():
     promoter_previews = []
+    gene_function = []
+    spatial_expression_patterns = []
+    cellular_expression_patterns = []
     worm_scrapper = navigate_to_results_page()
     result_bodies = worm_scrapper.find_elements(By.CLASS_NAME, "result_body")
     for detail in result_bodies:
         promoter_previews.append(detail.text)
-    return promoter_previews
+    for preview in promoter_previews:
+        info = re.split("Gene function:|Temporal\sexpression\spattern:\s|Spatial\sexpression\spatterns:\nGeneral\slocations:|Cellular\sexpression\spattern:", preview)
+        gene_function.append(info[1].strip("\n"))
+        spatial_expression_patterns.append(info[3].strip("\n"))
+        cellular_expression_patterns.append(info[4].strip("\n"))
+    return gene_function, spatial_expression_patterns, cellular_expression_patterns, promoter_previews
 
 def get_expression_details():
     expression_details_links, _, _, _, = get_links_to_all_details_pages()
@@ -127,7 +135,7 @@ def get_expression_details():
         promoters.append(info_list[0])
         begining.append(info_list[1])
         termination.append(info_list[2])
-    return promoters, begining, termination, detailed_expression_patterns
+    return promoters, begining, termination, detailed_expression_patterns, expression_details
 
 def get_strain_info():
     expression_details_links, _, _, _, = get_links_to_all_details_pages()
@@ -167,6 +175,20 @@ def get_links_to_all_details_pages():
     return expression_details_links, expression_details_list, unique_ids, uuids
 
 
+def get_single_preview():
+    promoter_preview = get_promoter_preview_info()
+    return promoter_preview[1]
+
 
 if __name__ == "__main__":
-    promoters, begining, termination, detailed_expression_patterns = get_expression_details()
+    a, b, c, d = get_promoter_preview_info()
+    print(a[1])
+    print(len(a))
+    print(b[1])
+    print(len(b))
+    print(c[1])
+    print(len(c))
+    print(d[1])
+    print(len(d))
+    
+
