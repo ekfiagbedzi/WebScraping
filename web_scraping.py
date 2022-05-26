@@ -111,12 +111,23 @@ def get_promoter_preview_info():
 def get_expression_details():
     expression_details_links, _, _, _, = get_links_to_all_details_pages()
     expression_details = []
+    promoters = []
+    begining = []
+    termination = []
+    detailed_expression_patterns = []
     for url in expression_details_links:
         worm_scrapper = Scrapper(url, PATH)
         worm_scrapper.load_webpage()
         result_body = worm_scrapper.find_element(By.CLASS_NAME, "result_body")
         expression_details.append(result_body.text)
-    return expression_details
+    for detail in expression_details:
+        info = re.split("Promoter|Temporal\sexpression\spattern|Detailed\sexpression\spatterns|\n", str(detail))
+        detailed_expression_patterns.append((re.split("Detailed\sexpression\spatterns", str(detail))[1]).strip(":\n"))
+        info_list = [info[i] for i in [2, 7, 9]]
+        promoters.append(info_list[0])
+        begining.append(info_list[1])
+        termination.append(info_list[2])
+    return promoters, begining, termination, detailed_expression_patterns
 
 def get_strain_info():
     expression_details_links, _, _, _, = get_links_to_all_details_pages()
@@ -156,16 +167,6 @@ def get_links_to_all_details_pages():
     return expression_details_links, expression_details_list, unique_ids, uuids
 
 
-def get_single_expression_details():
-    expression_details_links, _, _, _, = get_links_to_all_details_pages()
-    url = expression_details_links[1]
-    worm_scrapper = Scrapper(url, PATH)
-    worm_scrapper.load_webpage()
-    result_body = worm_scrapper.find_element(By.CLASS_NAME, "result_body")
-    return result_body.text
-
-
 
 if __name__ == "__main__":
-    details = get_single_expression_details()
-    print(re.split("Temporal\sexpression\spattern|Detailed\sexpression\spatterns", str(details)))
+    promoters, begining, termination, detailed_expression_patterns = get_expression_details()
