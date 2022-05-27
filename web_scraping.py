@@ -1,6 +1,7 @@
 # python in-built libraries
 import time
 import re
+from typing import OrderedDict
 import urllib.request as req
 
 import uuid
@@ -176,19 +177,18 @@ def get_links_to_all_details_pages():
 
 
 def get_single_preview():
-    promoter_preview = get_promoter_preview_info()
-    return promoter_preview[1]
+    strain_info = get_strain_info()
+    return strain_info[0]
 
 
 if __name__ == "__main__":
-    a, b, c, d = get_promoter_preview_info()
-    print(a[1])
-    print(len(a))
-    print(b[1])
-    print(len(b))
-    print(c[1])
-    print(len(c))
-    print(d[1])
-    print(len(d))
-    
+    #info = get_single_preview()
+    #with open("string.txt", "w") as f:
+    #    f.write(str(info))
+    #print(info)
+    #print(re.split("Promoter:|Strain\sInformation:\sStrain\sname:|Date\screated:|Source\sof\sgenotype:|Reporter\sallele:\sLineage\sallele:\sReporter\sconstruct:|", info))#|Lineage\sallele:|Reporter\sconstruct:|Created\sby:|Construct\sInformation:\sPlasmid\sname:|Gene:|Transcript:|Promoter\slength:|Left\sprimer:|Right\sprimer:|Vector:|Integrated,\sExpressing\sStrains:|", info))  
 
+    with open("string.txt", "r") as f:
+        info = f.read()
+
+    print(re.split("Promoter:|Forward:|Right\sprimer:\sReverse:|Vector:|Integrated, Expressing Strains:|Expression Details", info))
