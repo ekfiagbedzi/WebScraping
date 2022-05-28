@@ -191,4 +191,4 @@ if __name__ == "__main__":
     with open("string.txt", "r") as f:
         info = f.read()
 
-    print(re.split("Promoter:|Forward:|Right\sprimer:\sReverse:|Vector:|Integrated, Expressing Strains:|Expression Details", info))
+    print(re.split("Promoter:|Strain\sInformation:|Strain\sname:|Date\screated:|Source\sof\sgenotype:|Reporter\sallele:|Lineage\sallele:|Reporter\sconstruct:|Created\sby:|Construct\sInformation:|Plasmid\sname:|Gene:|Transcript:|Promoter\slength:|Left\sprimer:|Forward:|Right\sprimer:\s|Reverse:|Vector:|Integrated, Expressing Strains:|Expression Details", info))
