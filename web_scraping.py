@@ -142,16 +142,23 @@ def get_expression_details():
 def get_strain_info():
     expression_details_links, _, _, _, = get_links_to_all_details_pages()
     strain_info = []
+    promoter = []
+    strain_information = []
     strain_name = []
     date_created = []
     source = []
+    reporter = []
+    lineage = []
     construct = []
     created_by = []
+    construct_info = []
     plasmid_name = []
     gene = []
     transcript = []
     promoter_length = []
+    left = []
     forward = []
+    right = []
     reverse = []
     vector = []
     expressing_strains = []
@@ -164,23 +171,29 @@ def get_strain_info():
     for info in strain_info:
         string_list = re.split("Promoter:|Strain\sInformation:|Strain\sname:|Date\screated:|Source\sof\sgenotype:|Reporter\sallele:|Lineage\sallele:|Reporter\sconstruct:|Created\sby:|Construct\sInformation:|Plasmid\sname:|Gene:|Transcript:|Promoter\slength:|Left\sprimer:|Forward:|Right\sprimer:\s|Reverse:|Vector:|Integrated, Expressing Strains:|Expression Details", info)
         stripped = [i.strip() for i in string_list]
+        promoter.append(stripped[1])
+        strain_information.append(stripped[2])
         strain_name.append(stripped[3])
         date_created.append(stripped[4])
         source.append(stripped[5])
+        reporter.append(stripped[6])
+        lineage.append(stripped[7])
         construct.append(stripped[8])
         created_by.append(stripped[9])
+        construct_info.append(stripped[10])
         plasmid_name.append(stripped[11])
         gene.append(stripped[12])
         transcript.append(stripped[13])
         promoter_length.append(stripped[14])
+        left.append(stripped[15])
         forward.append(stripped[16])
+        right.append(stripped[17])
         reverse.append(stripped[18])
         vector.append(stripped[19])
-        expressing_strains.append(stripped[20])
+        expressing_strains.append(stripped[-2])
 
 
-    return strain_info, strain_name, date_created, source, construct, created_by, plasmid_name, gene, transcript, promoter_length, forward, reverse, vector, expressing_strains
-
+    return strain_info, promoter, strain_information, strain_name, date_created, source, reporter, lineage, construct, created_by, construct_info, plasmid_name, gene, transcript, promoter_length, left, forward, right, reverse, vector, expressing_strains
 def download_images(uuids=[]):
     image_urls = []
     index_count = 0
@@ -214,56 +227,5 @@ def get_single_preview():
 
 
 if __name__ == "__main__":
-    #strain_info, strain_name, date_created, source, construct, created_by, plasmid_name, gene, transcript, promoter_length, forward, reverse, vector, expressing_strains = get_strain_info()
-    #print(strain_name, date_created, source, construct, created_by, plasmid_name, gene, transcript, promoter_length, forward, reverse, vector, expressing_strains)
-    with open("string.txt", "r") as f:
-        info = f.read()
-
-    string_list = re.split("Promoter:|Strain\sInformation:|Strain\sname:|Date\screated:|Source\sof\sgenotype:|Reporter\sallele:|Lineage\sallele:|Reporter\sconstruct:|Created\sby:|Construct\sInformation:|Plasmid\sname:|Gene:|Transcript:|Promoter\slength:|Left\sprimer:|Forward:|Right\sprimer:\s|Reverse:|Vector:|Integrated, Expressing Strains:|Expression Details", info)
-    stripped = [i.strip() for i in string_list]
-    
-    promoter = []
-    strain_information = []
-    strain_name = []
-    date_created = []
-    source = []
-    reporter = []
-    lineage = []
-    construct = []
-    created_by = []
-    construct_info = []
-    plasmid_name = []
-    gene = []
-    transcript = []
-    promoter_length = []
-    left = []
-    forward = []
-    right = []
-    reverse = []
-    vector = []
-    expressing_strains = []
-
-    promoter.append(stripped[1])
-    strain_information.append(stripped[2])
-    strain_name.append(stripped[3])
-    date_created.append(stripped[4])
-    source.append(stripped[5])
-    reporter.append(stripped[6])
-    lineage.append(stripped[7])
-    construct.append(stripped[8])
-    created_by.append(stripped[9])
-    construct_info.append(stripped[10])
-    plasmid_name.append(stripped[11])
-    gene.append(stripped[12])
-    transcript.append(stripped[13])
-    promoter_length.append(stripped[14])
-    left.append(stripped[15])
-    forward.append(stripped[16])
-    right.append(stripped[17])
-    reverse.append(stripped[18])
-    vector.append(stripped[19])
-    expressing_strains.append(stripped[-2])
-
-    print(info)
-    print(len(stripped))
-    print(promoter, strain_information, strain_name, date_created, source, reporter, lineage, construct, created_by, construct_info, plasmid_name, gene, transcript, promoter_length, left, forward, right, reverse, vector, expressing_strains)
+    strain_info, promoter, strain_information, strain_name, date_created, source, reporter, lineage, construct, created_by, construct_info, plasmid_name, gene, transcript, promoter_length, left, forward, right, reverse, vector, expressing_strains = get_strain_info()
+    print(strain_info, promoter, strain_information, strain_name, date_created, source, reporter, lineage, construct, created_by, construct_info, plasmid_name, gene, transcript, promoter_length, left, forward, right, reverse, vector, expressing_strains)
