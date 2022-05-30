@@ -1,4 +1,5 @@
 # python in-built libraries
+from datetime import date
 import time
 import re
 from typing import OrderedDict
@@ -147,6 +148,11 @@ def get_strain_info():
         worm_scrapper.load_webpage()
         result_body = worm_scrapper.find_element(By.CLASS_NAME, "result_body")
         strain_info.append(result_body.text)
+    for info in strain_info:
+        string_list = re.split("Promoter:|Strain\sInformation:|Strain\sname:|Date\screated:|Source\sof\sgenotype:|Reporter\sallele:|Lineage\sallele:|Reporter\sconstruct:|Created\sby:|Construct\sInformation:|Plasmid\sname:|Gene:|Transcript:|Promoter\slength:|Left\sprimer:|Forward:|Right\sprimer:\s|Reverse:|Vector:|Integrated, Expressing Strains:|Expression Details", info)
+        stripped = [i.strip() for i in string_list]
+
+
     return strain_info
 
 def download_images(uuids=[]):
@@ -193,11 +199,36 @@ if __name__ == "__main__":
 
     string_list = re.split("Promoter:|Strain\sInformation:|Strain\sname:|Date\screated:|Source\sof\sgenotype:|Reporter\sallele:|Lineage\sallele:|Reporter\sconstruct:|Created\sby:|Construct\sInformation:|Plasmid\sname:|Gene:|Transcript:|Promoter\slength:|Left\sprimer:|Forward:|Right\sprimer:\s|Reverse:|Vector:|Integrated, Expressing Strains:|Expression Details", info)
     stripped = [i.strip() for i in string_list]
-    
-    try:
-        while True:
-            stripped.remove('')
 
-    except ValueError:
-        pass
+    strain_name = []
+    date_created = []
+    source = []
+    construct = []
+    created_by = []
+    plasmid_name = []
+    gene = []
+    transcript = []
+    promoter_length = []
+    forward = []
+    reverse = []
+    vector = []
+    expressing_strains = []
+
+
+    strain_name.append(stripped[3])
+    date_created.append(stripped[4])
+    source.append(stripped[5])
+    construct.append(stripped[8])
+    created_by.append(stripped[9])
+    plasmid_name.append(stripped[11])
+    gene.append(stripped[12])
+    transcript.append(stripped[13])
+    promoter_length.append(stripped[14])
+    forward.append(stripped[16])
+    reverse.append(stripped[18])
+    vector.append(stripped[19])
+    expressing_strains.append(stripped[20])
+
+    print(info)
     print(stripped)
+    print(strain_name, date_created, source, construct, created_by, plasmid_name, gene, transcript, promoter_length, forward, reverse, vector, expressing_strains)
