@@ -2,6 +2,7 @@
 from datetime import date
 import time
 import re
+import json
 from typing import OrderedDict
 import urllib.request as req
 
@@ -232,8 +233,11 @@ if __name__ == "__main__":
     #data_dict = dict(zip(["uuids", "image_urls"], [uuids, image_urls]))
     data_dict = dict(zip(["uuids", "gene_function", "spatial_expression_patterns", "cellular_expression_patterns", "promoter_previews", "begining", "termination", "detailed_expression_patterns", "expression_details", "promoters", "strain_information", "strain_name", "date_created", "source", "reporter", "lineage", "construct", "created_by", "construct_info", "plasmid_name", "gene", "transcript", "promoter_length", "left", "forward", "right", "reverse", "vector", "expressing_strains", "image_urls"], [uuids, gene_function, spatial_expression_patterns, cellular_expression_patterns, promoter_previews, begining, termination, detailed_expression_patterns, expression_details, promoters, strain_information, strain_name, date_created, source, reporter, lineage, construct, created_by, construct_info, plasmid_name, gene, transcript, promoter_length, left, forward, right, reverse, vector, expressing_strains, image_urls]))
     print(data_dict)
-    data_table = pd.DataFrame(data_dict)
-    print(data_table)
+    
+    with open("data.json", "w") as f:
+        json.dump(data_dict, f)
+
+    print("Saved")
 
 
     #print(promoters, strain_information, strain_name, date_created, source, reporter, lineage, construct, created_by, construct_info, plasmid_name, gene, transcript, promoter_length, left, forward, right, reverse, vector, expressing_strains)
