@@ -11,7 +11,7 @@ Python           3.9.12
 uuid             1.30
 
 ## imports
-The following libraries and packages were installed
+The following libraries and packages were imported
 ![Getting_started](../../../Downloads/code-snapshot.png)
 
 ## Code logic
@@ -19,9 +19,12 @@ Created a class called `Scrapper` used to scrape data from websites
 This class is initialized with the url and path to the driver of your website of interest.
 It gives access to methods such as `accept_all_cookies`, `click`, `search`, `forward`, `back`, which are usually needed to navigate webpages. 
 
-## Use Example for crapping promoter information on wormguides.org
+Created several functions to get all relevant details from each promoter page and also, download each image.
+Each image is also a unique `uuid`
+
+## Use Example for scrapping promoter information on wormguides.org
 To scrape all promoter information on wormguides website, run `web_scrapping.py` file in the environment containing the libraries as shown in the **environment setup section**
 
-Access the first details page
-
+The scrapper automatilcally acceses each details page of each promoter and gets information such as promoter
+name, gene function, temporal and spatial expression details, strain and plasmid details, primers, image urls, and images. It then dumps the data as a json file `data.json` and saves images as `.gif` 
 
