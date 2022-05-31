@@ -6,6 +6,7 @@ from typing import OrderedDict
 import urllib.request as req
 
 import uuid
+import pandas as pd
 
 # selenium functions
 from selenium import webdriver
@@ -137,7 +138,7 @@ def get_expression_details():
         promoters.append(info_list[0])
         begining.append(info_list[1])
         termination.append(info_list[2])
-    return promoters, begining, termination, detailed_expression_patterns, expression_details
+    return begining, termination, detailed_expression_patterns, expression_details
 
 def get_strain_info():
     expression_details_links, _, _, _, = get_links_to_all_details_pages()
@@ -193,7 +194,7 @@ def get_strain_info():
         expressing_strains.append(stripped[-2])
 
 
-    return strain_info, promoter, strain_information, strain_name, date_created, source, reporter, lineage, construct, created_by, construct_info, plasmid_name, gene, transcript, promoter_length, left, forward, right, reverse, vector, expressing_strains
+    return promoter, strain_information, strain_name, date_created, source, reporter, lineage, construct, created_by, construct_info, plasmid_name, gene, transcript, promoter_length, left, forward, right, reverse, vector, expressing_strains
 def download_images(uuids=[]):
     image_urls = []
     index_count = 0
@@ -221,11 +222,18 @@ def get_links_to_all_details_pages():
     return expression_details_links, expression_details_list, unique_ids, uuids
 
 
-def get_single_preview():
-    strain_info = get_strain_info()
-    return strain_info[0]
-
 
 if __name__ == "__main__":
-    strain_info, promoter, strain_information, strain_name, date_created, source, reporter, lineage, construct, created_by, construct_info, plasmid_name, gene, transcript, promoter_length, left, forward, right, reverse, vector, expressing_strains = get_strain_info()
-    print(strain_info, promoter, strain_information, strain_name, date_created, source, reporter, lineage, construct, created_by, construct_info, plasmid_name, gene, transcript, promoter_length, left, forward, right, reverse, vector, expressing_strains)
+    gene_function, spatial_expression_patterns, cellular_expression_patterns, promoter_previews = get_promoter_preview_info()
+    begining, termination, detailed_expression_patterns, expression_details = get_expression_details()
+    promoters, strain_information, strain_name, date_created, source, reporter, lineage, construct, created_by, construct_info, plasmid_name, gene, transcript, promoter_length, left, forward, right, reverse, vector, expressing_strains = get_strain_info()
+    _, _, _, uuids = get_links_to_all_details_pages()
+    image_urls = download_images(uuids=uuids)
+    #data_dict = dict(zip(["uuids", "image_urls"], [uuids, image_urls]))
+    data_dict = dict(zip(["uuids", "gene_function", "spatial_expression_patterns", "cellular_expression_patterns", "promoter_previews", "begining", "termination", "detailed_expression_patterns", "expression_details", "promoters", "strain_information", "strain_name", "date_created", "source", "reporter", "lineage", "construct", "created_by", "construct_info", "plasmid_name", "gene", "transcript", "promoter_length", "left", "forward", "right", "reverse", "vector", "expressing_strains", "image_urls"], [uuids, gene_function, spatial_expression_patterns, cellular_expression_patterns, promoter_previews, begining, termination, detailed_expression_patterns, expression_details, promoters, strain_information, strain_name, date_created, source, reporter, lineage, construct, created_by, construct_info, plasmid_name, gene, transcript, promoter_length, left, forward, right, reverse, vector, expressing_strains, image_urls]))
+    print(data_dict)
+    data_table = pd.DataFrame(data_dict)
+    print(data_table)
+
+
+    #print(promoters, strain_information, strain_name, date_created, source, reporter, lineage, construct, created_by, construct_info, plasmid_name, gene, transcript, promoter_length, left, forward, right, reverse, vector, expressing_strains)
