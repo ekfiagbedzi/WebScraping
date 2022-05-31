@@ -204,7 +204,7 @@ def download_images(uuids=[]):
     for tag in image_tags:
         image_url = str(tag.get_attribute("src"))
         req.urlretrieve(
-            image_url, "/Users/s2124052/Downloads/WormBaseImages/{}.gif".format(uuids[index_count]))
+            image_url, "/Users/s2124052/Documents/gitRepositories/Data_Collection_Pipeline/raw_data/images/{}.gif".format(uuids[index_count]))
         image_urls.append(image_url)
         index_count += 1
     return image_urls
@@ -234,7 +234,7 @@ if __name__ == "__main__":
     data_dict = dict(zip(["uuids", "gene_function", "spatial_expression_patterns", "cellular_expression_patterns", "promoter_previews", "begining", "termination", "detailed_expression_patterns", "expression_details", "promoters", "strain_information", "strain_name", "date_created", "source", "reporter", "lineage", "construct", "created_by", "construct_info", "plasmid_name", "gene", "transcript", "promoter_length", "left", "forward", "right", "reverse", "vector", "expressing_strains", "image_urls"], [uuids, gene_function, spatial_expression_patterns, cellular_expression_patterns, promoter_previews, begining, termination, detailed_expression_patterns, expression_details, promoters, strain_information, strain_name, date_created, source, reporter, lineage, construct, created_by, construct_info, plasmid_name, gene, transcript, promoter_length, left, forward, right, reverse, vector, expressing_strains, image_urls]))
     print(data_dict)
     
-    with open("data.json", "w") as f:
+    with open("raw_data/data.json", "w") as f:
         json.dump(data_dict, f)
 
     print("Saved")
