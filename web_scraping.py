@@ -1,8 +1,6 @@
 # python in-built libraries
-from datetime import date
 import re
 import json
-from typing import OrderedDict
 import urllib.request as req
 
 import uuid
