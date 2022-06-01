@@ -13,7 +13,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 # load chrome driver
-PATH = "/Users/s2124052/Downloads/chromedriver"
+PATH = "/home/biopythoncodepc/Documents/chromedriver"
 
 class Scrapper:
 
@@ -96,7 +96,6 @@ def navigate_to_results_page():
     worm_scrapper.click(By.XPATH, "Neuron-Specific Marker Genes", attribute="title")
     worm_scrapper.click(By.XPATH, "http://promoters.wormguides.org/", attribute="href")
     worm_scrapper.search("*", By.NAME, "q")
-    #worm_scrapper.click(By.TAG_NAME, "a")
     
     return worm_scrapper
 
@@ -203,7 +202,7 @@ def download_images(uuids=[]):
             image_url, "/Users/s2124052/Documents/gitRepositories/Data_Collection_Pipeline/raw_data/images/{}.gif".format(uuids[index_count]))
         image_urls.append(image_url)
         index_count += 1
-    return image_urls
+    return image_urls, image_tags
 
 
 def get_links_to_all_details_pages():
@@ -226,14 +225,9 @@ if __name__ == "__main__":
     promoters, strain_information, strain_name, date_created, source, reporter, lineage, construct, created_by, construct_info, plasmid_name, gene, transcript, promoter_length, left, forward, right, reverse, vector, expressing_strains = get_strain_info()
     _, _, _, uuids = get_links_to_all_details_pages()
     image_urls = download_images(uuids=uuids)
-    #data_dict = dict(zip(["uuids", "image_urls"], [uuids, image_urls]))
+    data_dict = dict(zip(["uuids", "image_urls"], [uuids, image_urls]))
     data_dict = dict(zip(["uuids", "gene_function", "spatial_expression_patterns", "cellular_expression_patterns", "promoter_previews", "begining", "termination", "detailed_expression_patterns", "expression_details", "promoters", "strain_information", "strain_name", "date_created", "source", "reporter", "lineage", "construct", "created_by", "construct_info", "plasmid_name", "gene", "transcript", "promoter_length", "left", "forward", "right", "reverse", "vector", "expressing_strains", "image_urls"], [uuids, gene_function, spatial_expression_patterns, cellular_expression_patterns, promoter_previews, begining, termination, detailed_expression_patterns, expression_details, promoters, strain_information, strain_name, date_created, source, reporter, lineage, construct, created_by, construct_info, plasmid_name, gene, transcript, promoter_length, left, forward, right, reverse, vector, expressing_strains, image_urls]))
-    print(data_dict)
+    
     
     with open("raw_data/data.json", "w") as f:
         json.dump(data_dict, f)
-
-    print("Saved")
-
-
-    #print(promoters, strain_information, strain_name, date_created, source, reporter, lineage, construct, created_by, construct_info, plasmid_name, gene, transcript, promoter_length, left, forward, right, reverse, vector, expressing_strains)
