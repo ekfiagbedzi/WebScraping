@@ -19,8 +19,13 @@ Created a class called `Scrapper` used to scrape data from websites
 This class is initialized with the url and path to the driver of your website of interest.
 It gives access to methods such as `accept_all_cookies`, `click`, `search`, `forward`, `back`, which are usually needed to navigate webpages. 
 
-Created several functions to get all relevant details from each promoter page and also, download each image.
-Each image is also a unique `uuid`
+Created the following functions to get data;
+1. `get_strain_info` to get details such as promoter sequence and strain name
+2. `get_expression details` to get temporal and spatial expression patterns of the promoter.
+3. `get_image_urls` to get links to each image for each promoter
+4. `download_images` to download and save each image associated to each promoter to disk. Each image is given a name corresponding to a uuid.
+
+
 
 ## Use Example for scrapping promoter information on wormguides.org
 To scrape all promoter information on wormguides website, run `web_scrapping.py` file in the environment containing the libraries as shown in the **environment setup section**
