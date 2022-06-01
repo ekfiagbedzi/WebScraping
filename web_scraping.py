@@ -231,3 +231,6 @@ if __name__ == "__main__":
     
     with open("raw_data/data.json", "w") as f:
         json.dump(data_dict, f)
+
+    print("done")
+    
