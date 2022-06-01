@@ -12,7 +12,7 @@ uuid             1.30
 
 ## imports
 The following libraries and packages were imported
-![Getting_started](../../../Downloads/code-snapshot.png)
+
 
 ## Code logic
 Created a class called `Scrapper` used to scrape data from websites
