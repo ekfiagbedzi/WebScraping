@@ -9,6 +9,7 @@ To run this script, use a python environment with the folowing libraries install
 selenium         4.1.5
 Python           3.9.12
 uuid             1.30
+pandas
 
 ## imports
 The following libraries and packages were imported
