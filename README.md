@@ -25,7 +25,7 @@ Created the following functions to get data;
 2. `get_expression details` to get temporal and spatial expression patterns of the promoter.
 3. `get_image_urls` to get links to each image for each promoter
 4. `download_images` to download and save each image associated to each promoter to disk. Each image is given a name corresponding to a uuid.
-
+5. `navigate_to_results_page` to get to search results page
 
 
 ## Use Example for scrapping promoter information on wormguides.org
