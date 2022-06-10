@@ -29,7 +29,7 @@ Created the following functions to get data;
 
 
 ## Use Example for scrapping promoter information on wormguides.org
-To scrape all promoter information on wormguides website, run `web_scrapping.py` file in the environment containing the libraries as shown in the **environment setup section**
+To scrape all the promoter information on wormguides website, run `web_scrapping.py` file in the environment containing the libraries as shown in the **environment setup section**
 
 The scrapper automatilcally acceses each details page of each promoter and gets information such as promoter
 name, gene function, temporal and spatial expression details, strain and plasmid details, primers, image urls, and images. It then dumps the data as a json file `data.json` and saves images as `.gif` 
