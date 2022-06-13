@@ -16,9 +16,50 @@ from selenium.webdriver.support import expected_conditions as EC
 PATH = "/home/biopythoncodepc/Documents/chromedriver"
 
 class Scrapper:
+    """Wraps all essential web _scraping funcitons into a single object
+
+    Parameters:
+    ----------
+    url: str
+        Website to be scrapped
+    
+    Attributes:
+    ----------
+    driver: obj
+        Webdriver used to connect website to python
+    ----------
+
+    Methods:
+    ----------
+    load_webpage()
+        Loads the page associated with the passed url
+    switch_driver(PATH)
+        Changes current driver to a new value
+    click(by, value, attribute)
+        Finds and clicks an attribute
+    search(input_text, by, value)
+        Access a search bar and search for a particular input
+    forward()
+        Goes to the next cached page
+    back()
+        Go to the previous cached page
+    get_element_attribute(element, attribute)
+        Access attribute of a passed element
+    get_element_attribute_from_list(list, attribute)
+        Get attributes from all elements of a list
+    find_element(by, value, attribute, timeout)
+        Find an element
+    find_elements(by, value, attribute, timeout)
+        Find several elements
+    extract_elements_from_list(list, by, value, attribute)
+        Extract elements from a list of elements
+    """
+
+
     driver = webdriver.Chrome(PATH)
     
     def __init__ (self, url):
+        """Initializes """
         self.url = url
 
     def load_webpage(self):
@@ -49,13 +90,15 @@ class Scrapper:
     def get_element_attribute(element, attribute):
         return element.get_attribute(attribute)
 
-    def get_element_attribute_from_list(self, list, attribute):
+    def get_element_attribute_from_list(self, list=None, attribute=None):
         attribute_list = []
         for member in list:
             link = self.get_element_attribute(member, attribute)
             attribute_list.append(link)
 
         return attribute_list
+
+        
 
 
     def find_element(self, by=None, value=None, attribute=None, timeout=20):
