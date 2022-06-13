@@ -24,6 +24,11 @@ class Scrapper:
     def load_webpage(self):
         self.driver.get(self.url)
 
+    @classmethod
+    def switch_driver(cls, PATH):
+        cls.driver = webdriver.Chrome(PATH)
+
+
     def click(self, by=None, value=None, attribute=None):
         element = self.find_element(by, value, attribute)
         element.click()
@@ -39,8 +44,9 @@ class Scrapper:
 
     def back(self):
         self.driver.back()
-
-    def get_element_attribute(self, element, attribute):
+    
+    @staticmethod
+    def get_element_attribute(element, attribute):
         return element.get_attribute(attribute)
 
     def get_element_attribute_from_list(self, list, attribute):
@@ -77,7 +83,8 @@ class Scrapper:
 
         return elements
 
-    def extract_elements_from_list(self, list=None, by=None, value=None, attribute=None):
+    @staticmethod
+    def extract_elements_from_list(list=None, by=None, value=None, attribute=None):
         links = []
         if by == By.XPATH:
             value = '//a[@{}="{}"]'.format(attribute, value)
