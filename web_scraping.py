@@ -139,23 +139,21 @@ def navigate_to_results_page():
     return worm_scrapper
 
 def get_promoter_preview_info():
-    promoter_previews = []
     gene_function = []
     spatial_expression_patterns = []
     cellular_expression_patterns = []
     worm_scrapper = navigate_to_results_page()
     result_bodies = worm_scrapper.find_elements(By.CLASS_NAME, "result_body")
-    for detail in result_bodies:
-        promoter_previews.append(detail.text)
+    promoter_previews = [detail.text for detail in result_bodies]
     for preview in promoter_previews:
         info = re.split("Gene function:|Temporal\sexpression\spattern:\s|Spatial\sexpression\spatterns:\nGeneral\slocations:|Cellular\sexpression\spattern:", preview)
         gene_function.append(info[1].strip("\n"))
         spatial_expression_patterns.append(info[3].strip("\n"))
         cellular_expression_patterns.append(info[4].strip("\n"))
-    return gene_function, spatial_expression_patterns, cellular_expression_patterns, promoter_previews
+    return gene_function, spatial_expression_patterns, cellular_expression_patterns
 
 def get_expression_details():
-    expression_details_links, _, _, _, = get_links_to_all_details_pages()
+    expression_details_links, _, = get_links_to_all_details_pages()
     expression_details = []
     promoters = []
     begining = []
@@ -173,10 +171,10 @@ def get_expression_details():
         promoters.append(info_list[0])
         begining.append(info_list[1])
         termination.append(info_list[2])
-    return begining, termination, detailed_expression_patterns, expression_details
+    return begining, termination, detailed_expression_patterns
 
 def get_strain_info():
-    expression_details_links, _, _, _, = get_links_to_all_details_pages()
+    expression_details_links, _, = get_links_to_all_details_pages()
     strain_info = []
     promoter = []
     strain_information = []
@@ -230,7 +228,16 @@ def get_strain_info():
 
 
     return promoter, strain_information, strain_name, date_created, source, reporter, lineage, construct, created_by, construct_info, plasmid_name, gene, transcript, promoter_length, left, forward, right, reverse, vector, expressing_strains
-def download_images(uuids=[]):
+
+def get_links_to_all_details_pages():
+    worm_scrapper = navigate_to_results_page()
+    details_list = worm_scrapper.find_elements(By.TAG_NAME, "span")
+    expression_details_list = worm_scrapper.extract_elements_from_list(details_list, By.TAG_NAME, "a")
+    expression_details_links = worm_scrapper.get_element_attribute_from_list(expression_details_list, "href")
+    uuids = [str(uuid.uuid4()) for expression_details_link in expression_details_links]
+    return expression_details_links, uuids
+
+def download_images(uuids=None):
     image_urls = []
     index_count = 0
     worm_scrapper = navigate_to_results_page()
@@ -241,31 +248,20 @@ def download_images(uuids=[]):
             image_url, "/home/biopythoncodepc/Documents/git_repositories/Data_Collection_Pipeline/raw_data/images/{}.gif".format(uuids[index_count]))
         image_urls.append(image_url)
         index_count += 1
-    return image_urls, image_tags
+    return image_urls
 
 
-def get_links_to_all_details_pages():
-    worm_scrapper = navigate_to_results_page()
-    details_list = worm_scrapper.find_elements(By.TAG_NAME, "span")
-    expression_details_list = worm_scrapper.extract_elements_from_list(details_list, By.TAG_NAME, "a")
-    expression_details_links = worm_scrapper.get_element_attribute_from_list(expression_details_list, "href")
-    unique_ids = []
-    uuids = []
-    for expression_details_link in expression_details_links:
-        unique_ids.append(expression_details_link.split("?pid=")[1])
-        uuids.append(str(uuid.uuid4()))
-    return expression_details_links, expression_details_list, unique_ids, uuids
 
 
 
 if __name__ == "__main__":
-    gene_function, spatial_expression_patterns, cellular_expression_patterns, promoter_previews = get_promoter_preview_info()
-    begining, termination, detailed_expression_patterns, expression_details = get_expression_details()
+    gene_function, spatial_expression_patterns, cellular_expression_patterns= get_promoter_preview_info()
+    begining, termination, detailed_expression_patterns = get_expression_details()
     promoters, strain_information, strain_name, date_created, source, reporter, lineage, construct, created_by, construct_info, plasmid_name, gene, transcript, promoter_length, left, forward, right, reverse, vector, expressing_strains = get_strain_info()
-    _, _, _, uuids = get_links_to_all_details_pages()
+    _, uuids = get_links_to_all_details_pages()
     image_urls = download_images(uuids=uuids)
     data_dict = dict(zip(["uuids", "image_urls"], [uuids, image_urls]))
-    data_dict = dict(zip(["uuids", "gene_function", "spatial_expression_patterns", "cellular_expression_patterns", "promoter_previews", "begining", "termination", "detailed_expression_patterns", "expression_details", "promoters", "strain_information", "strain_name", "date_created", "source", "reporter", "lineage", "construct", "created_by", "construct_info", "plasmid_name", "gene", "transcript", "promoter_length", "left", "forward", "right", "reverse", "vector", "expressing_strains", "image_urls"], [uuids, gene_function, spatial_expression_patterns, cellular_expression_patterns, promoter_previews, begining, termination, detailed_expression_patterns, expression_details, promoters, strain_information, strain_name, date_created, source, reporter, lineage, construct, created_by, construct_info, plasmid_name, gene, transcript, promoter_length, left, forward, right, reverse, vector, expressing_strains, image_urls]))
+    data_dict = dict(zip(["uuids", "gene_function", "spatial_expression_patterns", "cellular_expression_patterns", "begining", "termination", "detailed_expression_patterns", "promoters", "strain_information", "strain_name", "date_created", "source", "reporter", "lineage", "construct", "created_by", "construct_info", "plasmid_name", "gene", "transcript", "promoter_length", "left", "forward", "right", "reverse", "vector", "expressing_strains", "image_urls"], [uuids, gene_function, spatial_expression_patterns, cellular_expression_patterns, begining, termination, detailed_expression_patterns, promoters, strain_information, strain_name, date_created, source, reporter, lineage, construct, created_by, construct_info, plasmid_name, gene, transcript, promoter_length, left, forward, right, reverse, vector, expressing_strains, image_urls]))
     
     
     with open("raw_data/data.json", "w") as f:
