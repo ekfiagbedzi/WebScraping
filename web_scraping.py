@@ -80,26 +80,21 @@ class Scrapper:
         element.send_keys(input_text)
         element.send_keys(Keys.RETURN)
 
-    def forward(self):
-        self.driver.forward()
+    @classmethod
+    def forward(cls):
+        cls.driver.forward()
 
-    def back(self):
-        self.driver.back()
+    @classmethod
+    def back(cls):
+        cls.driver.back()
     
     @staticmethod
     def get_element_attribute(element, attribute):
         return element.get_attribute(attribute)
 
     def get_element_attribute_from_list(self, list=None, attribute=None):
-        attribute_list = []
-        for member in list:
-            link = self.get_element_attribute(member, attribute)
-            attribute_list.append(link)
-
+        attribute_list = [self.get_element_attribute(member, attribute) for member in list]
         return attribute_list
-
-        
-
 
     def find_element(self, by=None, value=None, attribute=None, timeout=20):
         if by == By.XPATH:
@@ -128,13 +123,9 @@ class Scrapper:
 
     @staticmethod
     def extract_elements_from_list(list=None, by=None, value=None, attribute=None):
-        links = []
         if by == By.XPATH:
             value = '//a[@{}="{}"]'.format(attribute, value)
-        for element in list:
-            link = element.find_element(by, value)
-            links.append(link)
-            
+        links = [element.find_element(by, value) for element in list]
         return links
 
 def navigate_to_results_page():
