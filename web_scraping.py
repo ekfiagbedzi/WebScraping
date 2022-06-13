@@ -95,7 +95,7 @@ class Scrapper:
         return links
 
 def navigate_to_results_page():
-    worm_scrapper = Scrapper(url="https://wormguides.org/", PATH=PATH)
+    worm_scrapper = Scrapper(url="https://wormguides.org/")
     worm_scrapper.load_webpage()
     worm_scrapper.click(By.XPATH, "https://wormguides.org/resources/", "href")
     worm_scrapper.click(By.XPATH, "Neuron-Specific Marker Genes", attribute="title")
@@ -128,7 +128,7 @@ def get_expression_details():
     termination = []
     detailed_expression_patterns = []
     for url in expression_details_links:
-        worm_scrapper = Scrapper(url, PATH)
+        worm_scrapper = Scrapper(url)
         worm_scrapper.load_webpage()
         result_body = worm_scrapper.find_element(By.CLASS_NAME, "result_body")
         expression_details.append(result_body.text)
@@ -166,7 +166,7 @@ def get_strain_info():
     expressing_strains = []
     for url in expression_details_links:
         url = url.replace("detailedExpression", "strainInfo")
-        worm_scrapper = Scrapper(url, PATH)
+        worm_scrapper = Scrapper(url)
         worm_scrapper.load_webpage()
         result_body = worm_scrapper.find_element(By.CLASS_NAME, "result_body")
         strain_info.append(result_body.text)
@@ -204,7 +204,7 @@ def download_images(uuids=[]):
     for tag in image_tags:
         image_url = str(tag.get_attribute("src"))
         req.urlretrieve(
-            image_url, "/Users/s2124052/Documents/gitRepositories/Data_Collection_Pipeline/raw_data/images/{}.gif".format(uuids[index_count]))
+            image_url, "/home/biopythoncodepc/Documents/git_repositories/Data_Collection_Pipeline/raw_data/images/{}.gif".format(uuids[index_count]))
         image_urls.append(image_url)
         index_count += 1
     return image_urls, image_tags
