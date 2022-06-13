@@ -12,16 +12,14 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-# load chrome driver
+# set path to chrome driver
 PATH = "/home/biopythoncodepc/Documents/chromedriver"
 
 class Scrapper:
-
+    driver = webdriver.Chrome(PATH)
     
-    def __init__ (self, url, PATH):
-        self.PATH = PATH
+    def __init__ (self, url):
         self.url = url
-        self.driver = webdriver.Chrome(self.PATH)
 
     def load_webpage(self):
         self.driver.get(self.url)
