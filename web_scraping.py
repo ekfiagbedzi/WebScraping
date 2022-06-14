@@ -4,6 +4,8 @@ import json
 import urllib.request as req
 
 import uuid
+from pydantic import BaseModel
+from pydantic import validate_arguments
 
 # selenium functions
 from selenium import webdriver
@@ -15,7 +17,7 @@ from selenium.webdriver.support import expected_conditions as EC
 # set path to chrome driver
 PATH = "/home/biopythoncodepc/Documents/chromedriver"
 
-class Scrapper:
+class Scrapper(BaseModel):
     """Wraps all essential web _scraping funcitons into a single object
 
     Parameters:
@@ -55,26 +57,50 @@ class Scrapper:
         Extract elements from a list of elements
     """
 
-
+    # web driver
     driver = webdriver.Chrome(PATH)
     
+    @validate_arguments
     def __init__ (self, url):
-        """Initializes """
         self.url = url
 
+
     def load_webpage(self):
+        """Open the website of interest in browser"""
         self.driver.get(self.url)
 
     @classmethod
     def switch_driver(cls, PATH):
+        """Change the current webdriver
+           Args:
+                PATH (str): File path to the webdriver
+           Return:
+                None
+        """
         cls.driver = webdriver.Chrome(PATH)
 
 
-    def click(self, by=None, value=None, attribute=None):
+    def click(self, by, value, attribute):
+        """Click a webelement
+           Args:
+                by (Any): Element tag
+                value (str): Element
+                attribute (str): Specific attribute of the element
+           Return:
+                None
+        """
         element = self.find_element(by, value, attribute)
         element.click()
 
-    def search(self, input_text="", by=None, value=None):
+    def search(self, input_text, by=None, value=None):
+        """Search for an input
+           Args:
+                input_text (str): Item to be searched
+                by (Any): Search bar tag
+                value: Element value
+           Return:
+                None
+        """
         element = self.find_element(by, value)
         element.clear()
         element.send_keys(input_text)
@@ -82,22 +108,47 @@ class Scrapper:
 
     @classmethod
     def forward(cls):
+        """Move to next cached page"""
         cls.driver.forward()
 
     @classmethod
     def back(cls):
+        """Go back to previous cached page"""
         cls.driver.back()
     
     @staticmethod
     def get_element_attribute(element, attribute):
-        return element.get_attribute(attribute)
+        """Find a particular attribute from an element
+           Args:
+                element (WebElement): Element to be searched
+                attribute (str): Attribute to be found from element
+           Return:
+                None
+        """
+        return element.get_attribute(attribute) 
 
     def get_element_attribute_from_list(self, list=None, attribute=None):
+        """Find a particular attribute from a list of elements
+           Args:
+                list (list): List of elements
+                attribute (str): Attribute to be found from element
+           Return:
+                List of attributes
+        """
         attribute_list = [self.get_element_attribute(member, attribute) for member in list]
         return attribute_list
 
     def find_element(self, by=None, value=None, attribute=None, timeout=20):
-        if by == By.XPATH:
+        """Find elements by tags and/or attributes
+           Args:
+                by (tag): Element tag
+                value: Element
+                attribute: attribute of interest of element
+                timeout: Wait time to ensure element is found
+           Return:
+                WebElement
+        """
+        if by == By.XPATH: # special case for XPATH tags
             value = '//a[@{}="{}"]'.format(attribute, value)
 
         try:
@@ -110,7 +161,16 @@ class Scrapper:
         return element
 
     def find_elements(self, by=None, value=None, attribute=None, timeout=10):
-        if by == By.XPATH:
+        """Find several similar elements by tags and/or attributes
+           Args:
+                by (tag): Element tag
+                value: Element
+                attribute: attribute of interest of element
+                timeout: Wait time to ensure element is found
+           Return:
+                List of WebElements
+        """
+        if by == By.XPATH: # special case for XPATH tags
             value = '//a[@{}="{}"]'.format(attribute, value)
         try:
             elements = WebDriverWait(self.driver, timeout).until(
@@ -123,12 +183,28 @@ class Scrapper:
 
     @staticmethod
     def extract_elements_from_list(list=None, by=None, value=None, attribute=None):
-        if by == By.XPATH:
+        """Extract elements from a list of elements
+           Args:
+                list (list): List of WebElements
+                by (tag): Element tag
+                value (str): Element
+                attribute (str): attribute of interest of element
+           Return:
+                List of WebElements
+        """
+        if by == By.XPATH: # special case for XPATH tags
             value = '//a[@{}="{}"]'.format(attribute, value)
+        
         links = [element.find_element(by, value) for element in list]
         return links
 
 def navigate_to_results_page():
+    """Navigate to the full neuronal promoter database of wormguides.org
+       Args:
+            None
+       Return:
+            Scrapper object
+    """
     worm_scrapper = Scrapper(url="https://wormguides.org/")
     worm_scrapper.load_webpage()
     worm_scrapper.click(By.XPATH, "https://wormguides.org/resources/", "href")
@@ -139,6 +215,12 @@ def navigate_to_results_page():
     return worm_scrapper
 
 def get_promoter_preview_info():
+    """Get promoter name, gene function and general expression information
+       Args:
+            None
+       Return:
+            (gene_function, spatial_expression_patterns, cellular_expression_patterns)
+    """    
     gene_function = []
     spatial_expression_patterns = []
     cellular_expression_patterns = []
@@ -153,6 +235,13 @@ def get_promoter_preview_info():
     return gene_function, spatial_expression_patterns, cellular_expression_patterns
 
 def get_expression_details():
+    """Get expression details of each promoter such as time of expression
+       Args:
+            None
+       Return:
+            (begining, termination, detailed_expression_patterns)
+    """
+    
     expression_details_links, _, = get_links_to_all_details_pages()
     expression_details = []
     promoters = []
@@ -174,6 +263,12 @@ def get_expression_details():
     return begining, termination, detailed_expression_patterns
 
 def get_strain_info():
+    """Get strain informatin such as primers and strain name
+       Args:
+            None
+       Return:
+            (promoter, strain_information, strain_name, date_created, source, reporter, lineage, construct, created_by, construct_info, plasmid_name, gene, transcript, promoter_length, left, forward, right, reverse, vector, expressing_strains)
+    """
     expression_details_links, _, = get_links_to_all_details_pages()
     strain_info = []
     promoter = []
@@ -230,6 +325,12 @@ def get_strain_info():
     return promoter, strain_information, strain_name, date_created, source, reporter, lineage, construct, created_by, construct_info, plasmid_name, gene, transcript, promoter_length, left, forward, right, reverse, vector, expressing_strains
 
 def get_links_to_all_details_pages():
+    """Generate unique IDs for each promoter
+       Args:
+            None
+       Return:
+            (expression_details_links, uuids)
+    """
     worm_scrapper = navigate_to_results_page()
     details_list = worm_scrapper.find_elements(By.TAG_NAME, "span")
     expression_details_list = worm_scrapper.extract_elements_from_list(details_list, By.TAG_NAME, "a")
@@ -238,6 +339,12 @@ def get_links_to_all_details_pages():
     return expression_details_links, uuids
 
 def download_images(uuids=None):
+    """Download associated images of each promoter
+       Args:
+            uuids (list): List of unique IDs to be assigned to each promoter image
+       Return:
+            Image URLs
+    """
     image_urls = []
     index_count = 0
     worm_scrapper = navigate_to_results_page()
