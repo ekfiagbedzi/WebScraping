@@ -1,4 +1,3 @@
-# python in-built libraries
 import re
 import json
 import urllib.request as req
@@ -7,7 +6,6 @@ import uuid
 from pydantic import BaseModel
 from pydantic import validate_arguments
 
-# selenium functions
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
@@ -102,7 +100,7 @@ class Scrapper(BaseModel):
                 None
         """
         element = self.find_element(by, value)
-        element.clear()
+        element.clear() # clear the search bar field
         element.send_keys(input_text)
         element.send_keys(Keys.RETURN)
 
@@ -153,7 +151,7 @@ class Scrapper(BaseModel):
 
         try:
             element = WebDriverWait(self.driver, timeout).until(
-                EC.presence_of_element_located((by, value)))
+                EC.presence_of_element_located((by, value))) # wait till the element is found
 
         except:
             self.driver.quit()
@@ -174,7 +172,8 @@ class Scrapper(BaseModel):
             value = '//a[@{}="{}"]'.format(attribute, value)
         try:
             elements = WebDriverWait(self.driver, timeout).until(
-                EC.presence_of_all_elements_located((by, value)))
+                EC.presence_of_all_elements_located((by, value))) # wait till the element is found
+
 
         except:
             self.driver.quit()
