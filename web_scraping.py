@@ -3,6 +3,7 @@ import json
 import urllib.request as req
 
 import uuid
+from wsgiref import validate
 from pydantic import BaseModel
 from pydantic import validate_arguments
 
@@ -59,16 +60,16 @@ class Scrapper(BaseModel):
     driver = webdriver.Chrome(PATH)
     
     @validate_arguments
-    def __init__ (self, url):
+    def __init__ (self, url: str) -> None:
         self.url = url
 
-
-    def load_webpage(self):
+    def load_webpage(self) -> None:
         """Open the website of interest in browser"""
         self.driver.get(self.url)
 
     @classmethod
-    def switch_driver(cls, PATH):
+    @validate_arguments
+    def switch_driver(cls, PATH: str) -> None:
         """Change the current webdriver
            Args:
                 PATH (str): File path to the webdriver
@@ -77,8 +78,8 @@ class Scrapper(BaseModel):
         """
         cls.driver = webdriver.Chrome(PATH)
 
-
-    def click(self, by, value, attribute):
+    @validate_arguments
+    def click(self, by, value: str, attribute: str) -> None:
         """Click a webelement
            Args:
                 by (Any): Element tag
@@ -90,7 +91,8 @@ class Scrapper(BaseModel):
         element = self.find_element(by, value, attribute)
         element.click()
 
-    def search(self, input_text, by=None, value=None):
+    @validate_arguments
+    def search(self, input_text: str, by, value: str) -> None:
         """Search for an input
            Args:
                 input_text (str): Item to be searched
@@ -105,27 +107,29 @@ class Scrapper(BaseModel):
         element.send_keys(Keys.RETURN)
 
     @classmethod
-    def forward(cls):
+    def forward(cls) -> None:
         """Move to next cached page"""
         cls.driver.forward()
 
     @classmethod
-    def back(cls):
+    def back(cls) -> None:
         """Go back to previous cached page"""
         cls.driver.back()
     
     @staticmethod
-    def get_element_attribute(element, attribute):
+    @validate_arguments
+    def get_element_attribute(element, attribute: str) -> object:
         """Find a particular attribute from an element
            Args:
                 element (WebElement): Element to be searched
                 attribute (str): Attribute to be found from element
            Return:
-                None
+                Attribute
         """
         return element.get_attribute(attribute) 
 
-    def get_element_attribute_from_list(self, list=None, attribute=None):
+    @validate_arguments
+    def get_element_attribute_from_list(self, list: list | None, attribute: str | None) -> list:
         """Find a particular attribute from a list of elements
            Args:
                 list (list): List of elements
@@ -135,8 +139,9 @@ class Scrapper(BaseModel):
         """
         attribute_list = [self.get_element_attribute(member, attribute) for member in list]
         return attribute_list
-
-    def find_element(self, by=None, value=None, attribute=None, timeout=20):
+    
+    @validate_arguments
+    def find_element(self, by, value : str, attribute: str, timeout: int | 20) -> object:
         """Find elements by tags and/or attributes
            Args:
                 by (tag): Element tag
@@ -158,7 +163,8 @@ class Scrapper(BaseModel):
 
         return element
 
-    def find_elements(self, by=None, value=None, attribute=None, timeout=10):
+    @ validate_arguments
+    def find_elements(self, by, value: str, attribute: str, timeout: int | 10) -> list:
         """Find several similar elements by tags and/or attributes
            Args:
                 by (tag): Element tag
@@ -181,7 +187,8 @@ class Scrapper(BaseModel):
         return elements
 
     @staticmethod
-    def extract_elements_from_list(list=None, by=None, value=None, attribute=None):
+    @validate_arguments
+    def extract_elements_from_list(list: list | None, by, value: str | None, attribute: str | None) -> list:
         """Extract elements from a list of elements
            Args:
                 list (list): List of WebElements
@@ -197,7 +204,8 @@ class Scrapper(BaseModel):
         links = [element.find_element(by, value) for element in list]
         return links
 
-def navigate_to_results_page():
+
+def navigate_to_results_page() -> object:
     """Navigate to the full neuronal promoter database of wormguides.org
        Args:
             None
@@ -213,7 +221,7 @@ def navigate_to_results_page():
     
     return worm_scrapper
 
-def get_promoter_preview_info():
+def get_promoter_preview_info() -> tuple:
     """Get promoter name, gene function and general expression information
        Args:
             None
@@ -233,7 +241,7 @@ def get_promoter_preview_info():
         cellular_expression_patterns.append(info[4].strip("\n"))
     return gene_function, spatial_expression_patterns, cellular_expression_patterns
 
-def get_expression_details():
+def get_expression_details() -> tuple:
     """Get expression details of each promoter such as time of expression
        Args:
             None
@@ -261,7 +269,7 @@ def get_expression_details():
         termination.append(info_list[2])
     return begining, termination, detailed_expression_patterns
 
-def get_strain_info():
+def get_strain_info() -> tuple:
     """Get strain informatin such as primers and strain name
        Args:
             None
@@ -323,7 +331,7 @@ def get_strain_info():
 
     return promoter, strain_information, strain_name, date_created, source, reporter, lineage, construct, created_by, construct_info, plasmid_name, gene, transcript, promoter_length, left, forward, right, reverse, vector, expressing_strains
 
-def get_links_to_all_details_pages():
+def get_links_to_all_details_pages() -> tuple:
     """Generate unique IDs for each promoter
        Args:
             None
@@ -337,7 +345,7 @@ def get_links_to_all_details_pages():
     uuids = [str(uuid.uuid4()) for expression_details_link in expression_details_links]
     return expression_details_links, uuids
 
-def download_images(uuids=None):
+def download_images(uuids: list | int) -> list:
     """Download associated images of each promoter
        Args:
             uuids (list): List of unique IDs to be assigned to each promoter image
@@ -366,9 +374,10 @@ if __name__ == "__main__":
     promoters, strain_information, strain_name, date_created, source, reporter, lineage, construct, created_by, construct_info, plasmid_name, gene, transcript, promoter_length, left, forward, right, reverse, vector, expressing_strains = get_strain_info()
     _, uuids = get_links_to_all_details_pages()
     image_urls = download_images(uuids=uuids)
-    data_dict = dict(zip(["uuids", "image_urls"], [uuids, image_urls]))
+
+    # store all data in a dictionary
     data_dict = dict(zip(["uuids", "gene_function", "spatial_expression_patterns", "cellular_expression_patterns", "begining", "termination", "detailed_expression_patterns", "promoters", "strain_information", "strain_name", "date_created", "source", "reporter", "lineage", "construct", "created_by", "construct_info", "plasmid_name", "gene", "transcript", "promoter_length", "left", "forward", "right", "reverse", "vector", "expressing_strains", "image_urls"], [uuids, gene_function, spatial_expression_patterns, cellular_expression_patterns, begining, termination, detailed_expression_patterns, promoters, strain_information, strain_name, date_created, source, reporter, lineage, construct, created_by, construct_info, plasmid_name, gene, transcript, promoter_length, left, forward, right, reverse, vector, expressing_strains, image_urls]))
     
-    
+    # store dictionary in json format
     with open("raw_data/data.json", "w") as f:
         json.dump(data_dict, f)    
