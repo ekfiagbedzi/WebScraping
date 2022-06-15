@@ -23,12 +23,50 @@ class ScrapperTestCase(unittest.TestCase):
         self.assertEqual(expected_value, actual_value)
 
     
-    def test_click(self): # click a button
+    def test_click(self): # click a different button
         scrapper = Scrapper("https://wormguides.org/")
         expected_value = None
         scrapper.load_webpage()
         actual_value = scrapper.click(By.XPATH, "https://wormguides.org/technologies/", "href")
         self.assertEqual(expected_value, actual_value)
         
+
+    def test_search(self):
+        scrapper = Scrapper("https://wormguides.org/")
+        expected_value = None
+        scrapper.load_webpage()
+        scrapper.click(By.XPATH, "https://wormguides.org/resources/", "href")
+        scrapper.click(By.XPATH, "Neuron-Specific Marker Genes", attribute="title")
+        scrapper.click(By.XPATH, "http://promoters.wormguides.org/", attribute="href")
+        actual_value = scrapper.search("rab-3", By.NAME, "q")
+
+        self.assertEqual(expected_value, actual_value)
+
+
+    def test_forward(self):
+        scrapper = Scrapper("https://wormguides.org/")
+        expected_value = None
+        scrapper.load_webpage()
+        scrapper.click(By.XPATH, "https://wormguides.org/technologies/", "href")
+        actual_value = scrapper.forward()
+        self.assertEqual(expected_value, actual_value)
+
+
+    def test_back(self):
+        scrapper = Scrapper("https://wormguides.org/")
+        expected_value = None
+        scrapper.load_webpage()
+        scrapper.click(By.XPATH, "https://wormguides.org/technologies/", "href")
+        actual_value = scrapper.forward()
+        self.assertEqual(expected_value, actual_value)
+
+    def test_get_element_attribute(self):
+        scrapper = Scrapper("https://wormguides.org/")
+        expected_value = object
+        scrapper.load_webpage()
+        element = scrapper.find_element(By.XPATH, "https://wormguides.org/wormguides-data/", "href")
+        actual_value = type(scrapper.get_element_attribute(element, "href"))
+        self.assertEqual(expected_value, actual_value)
+    
 
 unittest.main(argv=[''], verbosity=1, exit=False)
