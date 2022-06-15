@@ -361,16 +361,15 @@ def download_images(uuids: list) -> list:
 
 
 if __name__ == "__main__":
-    #gene_function, spatial_expression_patterns, cellular_expression_patterns= get_promoter_preview_info()
-    #begining, termination, detailed_expression_patterns = get_expression_details()
-    #promoters, strain_information, strain_name, date_created, source, reporter, lineage, construct, created_by, construct_info, plasmid_name, gene, transcript, promoter_length, left, forward, right, reverse, vector, expressing_strains = get_strain_info()
-    #_, uuids = get_links_to_all_details_pages()
-    #image_urls = download_images(uuids=uuids)
+    gene_function, spatial_expression_patterns, cellular_expression_patterns= get_promoter_preview_info()
+    begining, termination, detailed_expression_patterns = get_expression_details()
+    promoters, strain_information, strain_name, date_created, source, reporter, lineage, construct, created_by, construct_info, plasmid_name, gene, transcript, promoter_length, left, forward, right, reverse, vector, expressing_strains = get_strain_info()
+    _, uuids = get_links_to_all_details_pages()
+    image_urls = download_images(uuids=uuids)
 
     # store all data in a dictionary
-    #data_dict = dict(zip(["uuids", "gene_function", "spatial_expression_patterns", "cellular_expression_patterns", "begining", "termination", "detailed_expression_patterns", "promoters", "strain_information", "strain_name", "date_created", "source", "reporter", "lineage", "construct", "created_by", "construct_info", "plasmid_name", "gene", "transcript", "promoter_length", "left", "forward", "right", "reverse", "vector", "expressing_strains", "image_urls"], [uuids, gene_function, spatial_expression_patterns, cellular_expression_patterns, begining, termination, detailed_expression_patterns, promoters, strain_information, strain_name, date_created, source, reporter, lineage, construct, created_by, construct_info, plasmid_name, gene, transcript, promoter_length, left, forward, right, reverse, vector, expressing_strains, image_urls]))
+    data_dict = dict(zip(["uuids", "gene_function", "spatial_expression_patterns", "cellular_expression_patterns", "begining", "termination", "detailed_expression_patterns", "promoters", "strain_information", "strain_name", "date_created", "source", "reporter", "lineage", "construct", "created_by", "construct_info", "plasmid_name", "gene", "transcript", "promoter_length", "left", "forward", "right", "reverse", "vector", "expressing_strains", "image_urls"], [uuids, gene_function, spatial_expression_patterns, cellular_expression_patterns, begining, termination, detailed_expression_patterns, promoters, strain_information, strain_name, date_created, source, reporter, lineage, construct, created_by, construct_info, plasmid_name, gene, transcript, promoter_length, left, forward, right, reverse, vector, expressing_strains, image_urls]))
     
     # store dictionary in json format
-    #with open("raw_data/data.json", "w") as f:
-    #    json.dump(data_dict, f)    
-    navigate_to_results_page()
+    with open("raw_data/data.json", "w") as f:
+        json.dump(data_dict, f)    
