@@ -3,9 +3,7 @@ import json
 import urllib.request as req
 
 import uuid
-from wsgiref import validate
-from pydantic import BaseModel
-from pydantic import validate_arguments
+
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -16,7 +14,7 @@ from selenium.webdriver.support import expected_conditions as EC
 # set path to chrome driver
 PATH = "/home/biopythoncodepc/Documents/chromedriver"
 
-class Scrapper(BaseModel):
+class Scrapper:
     """Wraps all essential web _scraping funcitons into a single object
 
     Parameters:
@@ -59,16 +57,15 @@ class Scrapper(BaseModel):
     # web driver
     driver = webdriver.Chrome(PATH)
     
-    @validate_arguments
     def __init__ (self, url: str) -> None:
         self.url = url
+        
 
     def load_webpage(self) -> None:
         """Open the website of interest in browser"""
         self.driver.get(self.url)
 
     @classmethod
-    @validate_arguments
     def switch_driver(cls, PATH: str) -> None:
         """Change the current webdriver
            Args:
@@ -78,7 +75,7 @@ class Scrapper(BaseModel):
         """
         cls.driver = webdriver.Chrome(PATH)
 
-    @validate_arguments
+
     def click(self, by, value: str, attribute: str) -> None:
         """Click a webelement
            Args:
@@ -91,7 +88,7 @@ class Scrapper(BaseModel):
         element = self.find_element(by, value, attribute)
         element.click()
 
-    @validate_arguments
+
     def search(self, input_text: str, by, value: str) -> None:
         """Search for an input
            Args:
@@ -117,7 +114,6 @@ class Scrapper(BaseModel):
         cls.driver.back()
     
     @staticmethod
-    @validate_arguments
     def get_element_attribute(element, attribute: str) -> object:
         """Find a particular attribute from an element
            Args:
@@ -128,8 +124,7 @@ class Scrapper(BaseModel):
         """
         return element.get_attribute(attribute) 
 
-    @validate_arguments
-    def get_element_attribute_from_list(self, list: list | None, attribute: str | None) -> list:
+    def get_element_attribute_from_list(self, list: list, attribute: str) -> list:
         """Find a particular attribute from a list of elements
            Args:
                 list (list): List of elements
@@ -140,8 +135,7 @@ class Scrapper(BaseModel):
         attribute_list = [self.get_element_attribute(member, attribute) for member in list]
         return attribute_list
     
-    @validate_arguments
-    def find_element(self, by, value : str, attribute: str, timeout: int | 20) -> object:
+    def find_element(self, by, value : str, attribute=None, timeout=10) -> object:
         """Find elements by tags and/or attributes
            Args:
                 by (tag): Element tag
@@ -163,8 +157,7 @@ class Scrapper(BaseModel):
 
         return element
 
-    @ validate_arguments
-    def find_elements(self, by, value: str, attribute: str, timeout: int | 10) -> list:
+    def find_elements(self, by, value: str, attribute: str, timeout=10) -> list:
         """Find several similar elements by tags and/or attributes
            Args:
                 by (tag): Element tag
@@ -187,8 +180,7 @@ class Scrapper(BaseModel):
         return elements
 
     @staticmethod
-    @validate_arguments
-    def extract_elements_from_list(list: list | None, by, value: str | None, attribute: str | None) -> list:
+    def extract_elements_from_list(list: list, by, value: str, attribute: str) -> list:
         """Extract elements from a list of elements
            Args:
                 list (list): List of WebElements
@@ -345,7 +337,7 @@ def get_links_to_all_details_pages() -> tuple:
     uuids = [str(uuid.uuid4()) for expression_details_link in expression_details_links]
     return expression_details_links, uuids
 
-def download_images(uuids: list | int) -> list:
+def download_images(uuids: list) -> list:
     """Download associated images of each promoter
        Args:
             uuids (list): List of unique IDs to be assigned to each promoter image
@@ -369,15 +361,16 @@ def download_images(uuids: list | int) -> list:
 
 
 if __name__ == "__main__":
-    gene_function, spatial_expression_patterns, cellular_expression_patterns= get_promoter_preview_info()
-    begining, termination, detailed_expression_patterns = get_expression_details()
-    promoters, strain_information, strain_name, date_created, source, reporter, lineage, construct, created_by, construct_info, plasmid_name, gene, transcript, promoter_length, left, forward, right, reverse, vector, expressing_strains = get_strain_info()
-    _, uuids = get_links_to_all_details_pages()
-    image_urls = download_images(uuids=uuids)
+    #gene_function, spatial_expression_patterns, cellular_expression_patterns= get_promoter_preview_info()
+    #begining, termination, detailed_expression_patterns = get_expression_details()
+    #promoters, strain_information, strain_name, date_created, source, reporter, lineage, construct, created_by, construct_info, plasmid_name, gene, transcript, promoter_length, left, forward, right, reverse, vector, expressing_strains = get_strain_info()
+    #_, uuids = get_links_to_all_details_pages()
+    #image_urls = download_images(uuids=uuids)
 
     # store all data in a dictionary
-    data_dict = dict(zip(["uuids", "gene_function", "spatial_expression_patterns", "cellular_expression_patterns", "begining", "termination", "detailed_expression_patterns", "promoters", "strain_information", "strain_name", "date_created", "source", "reporter", "lineage", "construct", "created_by", "construct_info", "plasmid_name", "gene", "transcript", "promoter_length", "left", "forward", "right", "reverse", "vector", "expressing_strains", "image_urls"], [uuids, gene_function, spatial_expression_patterns, cellular_expression_patterns, begining, termination, detailed_expression_patterns, promoters, strain_information, strain_name, date_created, source, reporter, lineage, construct, created_by, construct_info, plasmid_name, gene, transcript, promoter_length, left, forward, right, reverse, vector, expressing_strains, image_urls]))
+    #data_dict = dict(zip(["uuids", "gene_function", "spatial_expression_patterns", "cellular_expression_patterns", "begining", "termination", "detailed_expression_patterns", "promoters", "strain_information", "strain_name", "date_created", "source", "reporter", "lineage", "construct", "created_by", "construct_info", "plasmid_name", "gene", "transcript", "promoter_length", "left", "forward", "right", "reverse", "vector", "expressing_strains", "image_urls"], [uuids, gene_function, spatial_expression_patterns, cellular_expression_patterns, begining, termination, detailed_expression_patterns, promoters, strain_information, strain_name, date_created, source, reporter, lineage, construct, created_by, construct_info, plasmid_name, gene, transcript, promoter_length, left, forward, right, reverse, vector, expressing_strains, image_urls]))
     
     # store dictionary in json format
-    with open("raw_data/data.json", "w") as f:
-        json.dump(data_dict, f)    
+    #with open("raw_data/data.json", "w") as f:
+    #    json.dump(data_dict, f)    
+    navigate_to_results_page()
