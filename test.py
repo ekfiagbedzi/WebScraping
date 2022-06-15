@@ -26,7 +26,8 @@ class ScrapperTestCase(unittest.TestCase):
     def test_click(self): # click a button
         scrapper = Scrapper("https://wormguides.org/")
         expected_value = None
-        actual_value = scrapper.click(By.XPATH, "https://wormguides.org/resources/", "href")
+        scrapper.load_webpage()
+        actual_value = scrapper.click(By.XPATH, "https://wormguides.org/technologies/", "href")
         self.assertEqual(expected_value, actual_value)
         
 
