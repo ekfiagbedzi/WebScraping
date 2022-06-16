@@ -132,8 +132,8 @@ class Scrapper:
            Return:
                 List of attributes
         """
-        attribute_list = [self.get_element_attribute(member, attribute) for member in list]
-        return attribute_list
+        return [self.get_element_attribute(member, attribute) for member in list]
+        
     
     def find_element(self, by, value : str, attribute=None, timeout=10) -> object:
         """Find elements by tags and/or attributes
@@ -157,7 +157,7 @@ class Scrapper:
 
         return element
 
-    def find_elements(self, by, value: str, attribute: str, timeout=10) -> list:
+    def find_elements(self, by, value: str, attribute=None, timeout=10) -> list:
         """Find several similar elements by tags and/or attributes
            Args:
                 by (tag): Element tag
@@ -180,7 +180,7 @@ class Scrapper:
         return elements
 
     @staticmethod
-    def extract_elements_from_list(list: list, by, value: str, attribute: str) -> list:
+    def extract_elements_from_list(list: list, by, value: str, attribute=None) -> list:
         """Extract elements from a list of elements
            Args:
                 list (list): List of WebElements
@@ -241,7 +241,7 @@ def get_expression_details() -> tuple:
             (begining, termination, detailed_expression_patterns)
     """
     
-    expression_details_links, _, = get_links_to_all_details_pages()
+    expression_details_links, _, _= get_links_to_all_details_pages()
     expression_details = []
     promoters = []
     begining = []
@@ -268,7 +268,7 @@ def get_strain_info() -> tuple:
        Return:
             (promoter, strain_information, strain_name, date_created, source, reporter, lineage, construct, created_by, construct_info, plasmid_name, gene, transcript, promoter_length, left, forward, right, reverse, vector, expressing_strains)
     """
-    expression_details_links, _, = get_links_to_all_details_pages()
+    expression_details_links, _, _= get_links_to_all_details_pages()
     strain_info = []
     promoter = []
     strain_information = []
@@ -334,8 +334,9 @@ def get_links_to_all_details_pages() -> tuple:
     details_list = worm_scrapper.find_elements(By.TAG_NAME, "span")
     expression_details_list = worm_scrapper.extract_elements_from_list(details_list, By.TAG_NAME, "a")
     expression_details_links = worm_scrapper.get_element_attribute_from_list(expression_details_list, "href")
+    website_ids = [expression_details_link.split("?pid=")[1] for expression_details_link in expression_details_links]
     uuids = [str(uuid.uuid4()) for expression_details_link in expression_details_links]
-    return expression_details_links, uuids
+    return expression_details_links, uuids, website_ids
 
 def download_images(uuids: list) -> list:
     """Download associated images of each promoter
@@ -364,12 +365,12 @@ if __name__ == "__main__":
     gene_function, spatial_expression_patterns, cellular_expression_patterns= get_promoter_preview_info()
     begining, termination, detailed_expression_patterns = get_expression_details()
     promoters, strain_information, strain_name, date_created, source, reporter, lineage, construct, created_by, construct_info, plasmid_name, gene, transcript, promoter_length, left, forward, right, reverse, vector, expressing_strains = get_strain_info()
-    _, uuids = get_links_to_all_details_pages()
+    _, uuids, website_ids = get_links_to_all_details_pages()
     image_urls = download_images(uuids=uuids)
 
     # store all data in a dictionary
-    data_dict = dict(zip(["uuids", "gene_function", "spatial_expression_patterns", "cellular_expression_patterns", "begining", "termination", "detailed_expression_patterns", "promoters", "strain_information", "strain_name", "date_created", "source", "reporter", "lineage", "construct", "created_by", "construct_info", "plasmid_name", "gene", "transcript", "promoter_length", "left", "forward", "right", "reverse", "vector", "expressing_strains", "image_urls"], [uuids, gene_function, spatial_expression_patterns, cellular_expression_patterns, begining, termination, detailed_expression_patterns, promoters, strain_information, strain_name, date_created, source, reporter, lineage, construct, created_by, construct_info, plasmid_name, gene, transcript, promoter_length, left, forward, right, reverse, vector, expressing_strains, image_urls]))
+    data_dict = dict(zip(["uuids", "website_ids", "gene_function", "spatial_expression_patterns", "cellular_expression_patterns", "begining", "termination", "detailed_expression_patterns", "promoters", "strain_information", "strain_name", "date_created", "source", "reporter", "lineage", "construct", "created_by", "construct_info", "plasmid_name", "gene", "transcript", "promoter_length", "left", "forward", "right", "reverse", "vector", "expressing_strains", "image_urls"], [uuids, website_ids, gene_function, spatial_expression_patterns, cellular_expression_patterns, begining, termination, detailed_expression_patterns, promoters, strain_information, strain_name, date_created, source, reporter, lineage, construct, created_by, construct_info, plasmid_name, gene, transcript, promoter_length, left, forward, right, reverse, vector, expressing_strains, image_urls]))
     
     # store dictionary in json format
     with open("raw_data/data.json", "w") as f:
-        json.dump(data_dict, f)    
+        json.dump(data_dict, f)
