@@ -68,18 +68,7 @@ class ScrapperTestCase(unittest.TestCase):
         actual_value = type(scrapper.get_element_attribute(element, "href"))
         self.assertEqual(expected_value, actual_value)
     
-    def test_find_elements(self):
-        scrapper = Scrapper("https://wormguides.org/")
-        expected_value = list
-        scrapper.load_webpage()
-        scrapper.click(By.XPATH, "https://wormguides.org/resources/", "href")
-        scrapper.click(By.XPATH, "Neuron-Specific Marker Genes", attribute="title")
-        scrapper.click(By.XPATH, "http://promoters.wormguides.org/", attribute="href")
-        scrapper.search("*", By.NAME, "q")
-        actual_value = type(scrapper.find_elements(By.CLASS_NAME, "result_topper"))
 
 
-
-        self.assertEqual(expected_value, actual_value)
 
 unittest.main(argv=[''], verbosity=1, exit=False)
