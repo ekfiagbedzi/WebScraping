@@ -9,7 +9,8 @@ To run this script, use a python environment with the folowing libraries install
 selenium         4.1.5
 Python           3.9.12
 uuid             1.30
-pandas
+pandas           1.4.2
+urllib3          1.26.9
 
 ## imports
 The following libraries and packages were imported
@@ -32,5 +33,5 @@ Created the following functions to get data;
 To scrape all the promoter information on wormguides website, run `web_scrapping.py` file in the environment containing the libraries as shown in the **environment setup section**
 
 The scrapper automatilcally acceses each details page of each promoter and gets information such as promoter
-name, gene function, temporal and spatial expression details, strain and plasmid details, primers, image urls, and images. It then dumps the data as a json file `data.json` and saves images as `.gif` 
+name, gene function, temporal and spatial expression details, strain and plasmid details, primers, image urls, and images. It then dumps the data as a json file `data.json` and saves images as `.gif`
 
