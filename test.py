@@ -62,7 +62,7 @@ class ScrapperTestCase(unittest.TestCase):
 
     def test_get_element_attribute(self):
         scrapper = Scrapper("https://wormguides.org/")
-        expected_value = object
+        expected_value = str
         scrapper.load_webpage()
         element = scrapper.find_element(By.XPATH, "https://wormguides.org/wormguides-data/", "href")
         actual_value = type(scrapper.get_element_attribute(element, "href"))
