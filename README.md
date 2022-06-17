@@ -35,3 +35,5 @@ To scrape all the promoter information on wormguides website, run `web_scrapping
 The scrapper automatilcally acceses each details page of each promoter and gets information such as promoter
 name, gene function, temporal and spatial expression details, strain and plasmid details, primers, image urls, and images. It then dumps the data as a json file `data.json` and saves images as `.gif`
 
+The JSON file was then dumped into an Amazon S3 bucket whilst the image data was dumped into S3 bucket as well
+
