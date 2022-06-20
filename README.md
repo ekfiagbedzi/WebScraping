@@ -16,7 +16,7 @@ urllib3          1.26.9
 The following libraries and packages were imported
 
 
-## Code logic
+## Code logica
 Created a class called `Scrapper` used to scrape data from websites
 This class is initialized with the url and path to the driver of your website of interest.
 It gives access to methods such as `accept_all_cookies`, `click`, `search`, `forward`, `back`, which are usually needed to navigate webpages. 
