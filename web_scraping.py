@@ -1,6 +1,7 @@
 import re
 import json
 import urllib.request as req
+import json
 
 import uuid
 
@@ -226,6 +227,14 @@ class Scrapper:
 
         return "{}/{}_{}.gif".format(file_path, uuids[index_count-1], index_count-1)
 
+    @staticmethod
+    def store_data_as_json(data_dict, file_path):
+        with open(file_path, "w") as f:
+            json.dump(data_dict, f)
+
+
+    
+
 
 if __name__ == "__main__":
     
@@ -349,4 +358,5 @@ if __name__ == "__main__":
         except:
             pass
 
+    
     
