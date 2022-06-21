@@ -4,7 +4,6 @@ import urllib.request as req
 
 import uuid
 
-
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
@@ -157,6 +156,10 @@ class Scrapper:
 
         return element
 
+    @staticmethod
+    def find_element_from_element(parent_element, by, value, attribute=None):
+        return parent_element.find_element(by, value)
+
     def find_elements(self, by, value: str, attribute=None, timeout=10) -> list:
         """Find several similar elements by tags and/or attributes
            Args:
@@ -266,7 +269,6 @@ if __name__ == "__main__":
         promoters.append(info_list[0]) # promoter names
         begining.append(info_list[1]) # time of expression start
         termination.append(info_list[2]) # time of expression termination
-    
 
     # get strain information
     strain_information = []
@@ -315,4 +317,5 @@ if __name__ == "__main__":
         vector.append(stripped[19])
         expressing_strains.append(stripped[-2])
 
-    
+
+
