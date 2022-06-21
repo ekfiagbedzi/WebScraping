@@ -241,6 +241,16 @@ if __name__ == "__main__":
     expression_details_elements = worm_scrapper.extract_elements_from_list(promoter_details_links, By.TAG_NAME, "a")
     expression_details_links = worm_scrapper.get_element_attribute_from_list(expression_details_elements, "href") # list of links to all expression details pages
 
+    # get promoter information
+    gene_function = []
+    spatial_expression_patterns = []
+    cellular_expression_patterns = []
+    for preview in promoter_previews:
+        info = re.split("Gene function:|Temporal\sexpression\spattern:\s|Spatial\sexpression\spatterns:\nGeneral\slocations:|Cellular\sexpression\spattern:", preview.text)
+        gene_function.append(info[1].strip("\n"))
+        spatial_expression_patterns.append(info[3].strip("\n"))
+        cellular_expression_patterns.append(info[4].strip("\n"))
+
     # get expression details
     promoters = []
     begining = []
@@ -257,7 +267,7 @@ if __name__ == "__main__":
         begining.append(info_list[1]) # time of expression start
         termination.append(info_list[2]) # time of expression termination
     
-    
+
     # get strain information
     strain_information = []
     strain_name = []
