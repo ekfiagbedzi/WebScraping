@@ -239,8 +239,7 @@ if __name__ == "__main__":
     promoter_previews = worm_scrapper.find_elements(By.CLASS_NAME, "result_body")
     promoter_details_links = worm_scrapper.find_elements(By.TAG_NAME, "span")
     expression_details_elements = worm_scrapper.extract_elements_from_list(promoter_details_links, By.TAG_NAME, "a")
-    expression_details_links = worm_scrapper.get_element_attribute_from_list(expression_details_elements, "href")
-
+    expression_details_links = worm_scrapper.get_element_attribute_from_list(expression_details_elements, "href") # list of links to all expression details pages
 
     # get expression details
     promoters = []
@@ -253,8 +252,57 @@ if __name__ == "__main__":
         result_body = worm_scrapper.find_element(By.CLASS_NAME, "result_body")
         info = re.split("Promoter|Temporal\sexpression\spattern|Detailed\sexpression\spatterns|\n", str(result_body.text))
         detailed_expression_patterns.append((re.split("Detailed\sexpression\spatterns", str(result_body.text))[1]).strip(":\n"))
-        info_list = [info[i] for i in [2, 7, 9]]
-        promoters.append(info_list[0])
-        begining.append(info_list[1])
-        termination.append(info_list[2])
+        info_list = [info[i] for i in [2, 7, 9]] # All parsed required information
+        promoters.append(info_list[0]) # promoter names
+        begining.append(info_list[1]) # time of expression start
+        termination.append(info_list[2]) # time of expression termination
+    
+    
+    # get strain information
+    strain_information = []
+    strain_name = []
+    date_created = []
+    source = []
+    reporter = []
+    lineage = []
+    construct = []
+    created_by = []
+    construct_info = []
+    plasmid_name = []
+    gene = []
+    transcript = []
+    promoter_length = []
+    left = []
+    forward = []
+    right = []
+    reverse = []
+    vector = []
+    expressing_strains = []
+    for url in expression_details_links:
+        url = url.replace("detailedExpression", "strainInfo")
+        worm_scrapper = Scrapper(url)
+        worm_scrapper.load_webpage()
+        result_body = worm_scrapper.find_element(By.CLASS_NAME, "result_body")
+        info_list = re.split("Promoter:|Strain\sInformation:|Strain\sname:|Date\screated:|Source\sof\sgenotype:|Reporter\sallele:|Lineage\sallele:|Reporter\sconstruct:|Created\sby:|Construct\sInformation:|Plasmid\sname:|Gene:|Transcript:|Promoter\slength:|Left\sprimer:|Forward:|Right\sprimer:\s|Reverse:|Vector:|Integrated, Expressing Strains:|Expression Details", str(result_body.text))
+        stripped = [i.strip() for i in info_list]
+        strain_information.append(stripped[2])
+        strain_name.append(stripped[3])
+        date_created.append(stripped[4])
+        source.append(stripped[5])
+        reporter.append(stripped[6])
+        lineage.append(stripped[7])
+        construct.append(stripped[8])
+        created_by.append(stripped[9])
+        construct_info.append(stripped[10])
+        plasmid_name.append(stripped[11])
+        gene.append(stripped[12])
+        transcript.append(stripped[13])
+        promoter_length.append(stripped[14])
+        left.append(stripped[15])
+        forward.append(stripped[16])
+        right.append(stripped[17])
+        reverse.append(stripped[18])
+        vector.append(stripped[19])
+        expressing_strains.append(stripped[-2])
+
     
