@@ -336,3 +336,17 @@ if __name__ == "__main__":
             pass
 
     
+
+    # generate uuids
+    uuids = Scrapper.generate_uuids(len(image_urls))
+
+    # download images
+    index = -1
+    for url in image_urls:
+        index+=1
+        try:
+            Scrapper.download_image(url, "/home/biopythoncodepc/Documents/git_repositories/Data_Collection_Pipeline/raw_data/images", uuids[index])
+        except:
+            pass
+
+    
