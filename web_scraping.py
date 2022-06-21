@@ -158,7 +158,14 @@ class Scrapper:
         return element
 
     @staticmethod
-    def find_element_from_element(parent_element, by, value, attribute=None):
+    def find_element_from_element(parent_element, by, value):
+        """Find an element within another element
+           Args:
+                parent_element (selenium.WebElement): Element
+                value: Element tag
+           Return:
+                selenium.WebElement
+        """
         return parent_element.find_element(by, value)
 
     def find_elements(self, by, value: str, attribute=None, timeout=10) -> list:
@@ -229,6 +236,13 @@ class Scrapper:
 
     @staticmethod
     def store_data_as_json(data_dict, file_path):
+        """Store dictionary data as JSON file
+            Args:
+                data_dict (dict): dictionary to be convereted to JSON
+                file_path (str): Path to file to be dumped in
+            Return:
+                None
+        """
         with open(file_path, "w") as f:
             json.dump(data_dict, f)
 
