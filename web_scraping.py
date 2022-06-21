@@ -4,6 +4,7 @@ import urllib.request as req
 import json
 
 import uuid
+import boto3
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -246,8 +247,21 @@ class Scrapper:
         with open(file_path, "w") as f:
             json.dump(data_dict, f)
 
-
-    
+    @staticmethod
+    def upload_to_s3(path_to_file, bucket_name=None, object_name=None):
+        """Upload data to an AWS S3 bucket
+           Args:
+            path_to_file (str):
+                directory of file to upload
+            bucket_name (str):
+                AWS S3 bucket
+            object_name (str):
+                Name to associated the file with on AWS S3
+           Return:
+                None"""
+        s3_client = boto3.client("s3")
+        response = s3_client.upload_file(path_to_file, bucket_name, object_name)
+        return response
 
 
 if __name__ == "__main__":
@@ -382,3 +396,8 @@ if __name__ == "__main__":
     Scrapper.store_data_as_json(promoter_previews_dict, "/home/biopythoncodepc/Documents/git_repositories/Data_Collection_Pipeline/raw_data/json/promoter_previews.json")
     Scrapper.store_data_as_json(expression_details, "/home/biopythoncodepc/Documents/git_repositories/Data_Collection_Pipeline/raw_data/json/expression_details.json")
     Scrapper.store_data_as_json(strain_info, "/home/biopythoncodepc/Documents/git_repositories/Data_Collection_Pipeline/raw_data/json/strain_info.json")
+    
+    # upload raw data to s3
+    Scrapper.upload_to_s3("raw_data/json/expression_details.json", "neuronalpromoters", "expression_details.json")
+    Scrapper.upload_to_s3("raw_data/json/expression_details.json", "neuronalpromoters", "promoter_previews.json")
+    Scrapper.upload_to_s3("raw_data/json/expression_details.json", "neuronalpromoters", "expression_details.json")
