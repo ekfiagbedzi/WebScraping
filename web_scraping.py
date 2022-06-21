@@ -359,4 +359,12 @@ if __name__ == "__main__":
             pass
 
     
-    
+    # store data as dictionaries
+    promoter_previews_dict = dict(zip(["uuids", "gene_function", "spatial_expression_patterns", "cellular_expression_patterns", "image_urls"], [uuids, gene_function, spatial_expression_patterns, cellular_expression_patterns, image_urls]))
+    expression_details = dict(zip(["uuids", "begining", "termination", "detailed_expression_patterns"], [uuids, begining, termination, detailed_expression_patterns]))
+    strain_info = dict(zip(["uuids", "promoters", "strain_information", "strain_name", "date_created", "source", "reporter", "lineage", "construct", "created_by", "construct_info", "plasmid_name", "gene", "transcript", "promoter_length", "left", "forward", "right", "reverse", "vector", "expressing_strains"], [uuids, promoters, strain_information, strain_name, date_created, source, reporter, lineage, construct, created_by, construct_info, plasmid_name, gene, transcript, promoter_length, left, forward, right, reverse, vector, expressing_strains]))
+
+    # dump data in json files
+    Scrapper.store_data_as_json(promoter_previews_dict, "/home/biopythoncodepc/Documents/git_repositories/Data_Collection_Pipeline/raw_data/json/promoter_previews.json")
+    Scrapper.store_data_as_json(expression_details, "/home/biopythoncodepc/Documents/git_repositories/Data_Collection_Pipeline/raw_data/json/expression_details.json")
+    Scrapper.store_data_as_json(strain_info, "/home/biopythoncodepc/Documents/git_repositories/Data_Collection_Pipeline/raw_data/json/strain_info.json")
