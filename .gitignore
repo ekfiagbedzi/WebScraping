@@ -2,3 +2,4 @@ raw_data/images/
 __pycache__/
 boto3_kit.ipynb
 test_data.csv
+check.py
