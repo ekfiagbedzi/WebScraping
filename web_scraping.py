@@ -238,5 +238,23 @@ if __name__ == "__main__":
     # get needed elements on results page
     promoter_previews = worm_scrapper.find_elements(By.CLASS_NAME, "result_body")
     promoter_details_links = worm_scrapper.find_elements(By.TAG_NAME, "span")
+    expression_details_elements = worm_scrapper.extract_elements_from_list(promoter_details_links, By.TAG_NAME, "a")
+    expression_details_links = worm_scrapper.get_element_attribute_from_list(expression_details_elements, "href")
 
+
+    # get expression details
+    promoters = []
+    begining = []
+    termination = []
+    detailed_expression_patterns = []
+    for url in expression_details_links:
+        worm_scrapper = Scrapper(url)
+        worm_scrapper.load_webpage()
+        result_body = worm_scrapper.find_element(By.CLASS_NAME, "result_body")
+        info = re.split("Promoter|Temporal\sexpression\spattern|Detailed\sexpression\spatterns|\n", str(result_body.text))
+        detailed_expression_patterns.append((re.split("Detailed\sexpression\spatterns", str(result_body.text))[1]).strip(":\n"))
+        info_list = [info[i] for i in [2, 7, 9]]
+        promoters.append(info_list[0])
+        begining.append(info_list[1])
+        termination.append(info_list[2])
     
