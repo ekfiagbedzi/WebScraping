@@ -317,5 +317,22 @@ if __name__ == "__main__":
         vector.append(stripped[19])
         expressing_strains.append(stripped[-2])
 
+    # get image_urls
+    image_tags = []
+    for element in promoter_previews:
+        try:
+            image_tags.append(Scrapper.find_element_from_element(element, By.TAG_NAME, "img"))
 
+        except:
+            image_tags.append("NA")
+            pass
+    image_urls = []
+    for tag in image_tags:
+        try:
+            image_urls.append(str(tag.get_attribute("src")))
 
+        except:
+            image_urls.append("NA")
+            pass
+
+    
