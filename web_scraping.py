@@ -243,5 +243,4 @@ if __name__ == "__main__":
     worm_scrapper.click(By.XPATH, "Neuron-Specific Marker Genes", attribute="title")
     worm_scrapper.click(By.XPATH, "http://promoters.wormguides.org/", attribute="href")
     worm_scrapper.search("*", By.NAME, "q")
-    
 
