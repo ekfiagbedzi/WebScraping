@@ -312,7 +312,6 @@ if __name__ == "__main__":
         except:
             image_tags.append("NA")
             pass
-    print("image_tags:", image_tags)
 
     image_urls = []
     for tag in image_tags:
@@ -321,7 +320,6 @@ if __name__ == "__main__":
         except:
             image_urls.append("NA")
             pass
-    print("image_urls", image_urls)
     
 
     # generate uuids
@@ -425,6 +423,7 @@ if __name__ == "__main__":
     expression_details = dict(zip(["uuids", "begining", "termination", "detailed_expression_patterns"], [uuids, begining, termination, detailed_expression_patterns]))
     strain_info = dict(zip(["uuids", "promoters", "strain_information", "strain_name", "date_created", "source", "reporter", "lineage", "construct", "created_by", "construct_info", "plasmid_name", "gene", "transcript", "promoter_length", "left", "forward", "right", "reverse", "vector", "expressing_strains"], [uuids, promoters, strain_information, strain_name, date_created, source, reporter, lineage, construct, created_by, construct_info, plasmid_name, gene, transcript, promoter_length, left, forward, right, reverse, vector, expressing_strains]))
 
+
     # dump data in json files
     Scrapper.store_data_as_json(promoter_previews_dict, "/home/biopythoncodepc/Documents/git_repositories/Data_Collection_Pipeline/raw_data/json/promoter_previews.json")
     Scrapper.store_data_as_json(expression_details, "/home/biopythoncodepc/Documents/git_repositories/Data_Collection_Pipeline/raw_data/json/expression_details.json")
@@ -444,9 +443,9 @@ if __name__ == "__main__":
     Scrapper.upload_to_s3("raw_data/json/promoter_previews.json", "neuronalpromoters", "promoter_previews.json")
     Scrapper.upload_to_s3("raw_data/json/strain_info.json", "neuronalpromoters", "strain_info.json")
     
+
     # upload images to AWS S3 bucket
     image_list = os.listdir("raw_data/images")
-    print(image_list)
     for i in image_list:
         Scrapper.upload_to_s3("/home/biopythoncodepc/Documents/git_repositories/Data_Collection_Pipeline/raw_data/images/{}".format(i), "neuronalpromoterimages", i)
 
