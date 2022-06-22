@@ -57,7 +57,7 @@ class ScrapperTestCase(unittest.TestCase):
         expected_value = None
         scrapper.load_webpage()
         scrapper.click(By.XPATH, "https://wormguides.org/technologies/", "href")
-        actual_value = scrapper.forward()
+        actual_value = scrapper.back()
         self.assertEqual(expected_value, actual_value)
 
     def test_get_element_attribute(self):
@@ -76,5 +76,17 @@ class ScrapperTestCase(unittest.TestCase):
         actual_value = type(scrapper.get_element_attribute_from_list(element, "type"))
         self.assertEqual(expected_value, actual_value)
 
+    def test_generate_uuids(self):
+        scrapper = Scrapper("https://wormguides.org/")
+        expected_value = 5
+        actual_value = len(scrapper.generate_uuids(5))
+        self.assertEqual(expected_value, actual_value)
 
+    def test_download_image(self):
+        scrapper = Scrapper("https://wormguides.org/")
+        expected_value = "/home/biopythoncodepc/Downloads/0d2fb674-4b6d-420b-a0e7-38c09869e5dd.gif"
+        actual_value = scrapper.download_image("http://promoters.wormguides.org/showImage.php?image_id=128", "/home/biopythoncodepc/Downloads/", "0d2fb674-4b6d-420b-a0e7-38c09869e5dd")
+        self.assertEqual(expected_value, actual_value)    
+
+"/home/biopythoncodepc/Documents/git_repositories/Data_Collection_Pipeline/raw_data/images/0d2fb674-4b6d-420b-a0e7-38c09869e5dd.gif"
 unittest.main(argv=[''], verbosity=2, exit=False)
