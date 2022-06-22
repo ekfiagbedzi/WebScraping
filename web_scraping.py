@@ -164,6 +164,7 @@ class Scrapper:
             element = WebDriverWait(self.driver, timeout).until(
                 EC.presence_of_element_located((by, value))) # wait till the element is found
         except:
+            print("Element ERROR!!!")
             self.driver.quit()
 
         return element
@@ -185,6 +186,7 @@ class Scrapper:
             elements = WebDriverWait(self.driver, timeout).until(
                 EC.presence_of_all_elements_located((by, value))) # wait till the element is found
         except:
+            print("Element ERROR!!!")
             self.driver.quit()
 
         return elements
@@ -332,7 +334,7 @@ if __name__ == "__main__":
         index+=1
         try:
             Scrapper.download_image(url, "/home/biopythoncodepc/Documents/git_repositories/Data_Collection_Pipeline/raw_data/images/", uuids[index])
-        except:
+        except ValueError:
             pass
     
     
