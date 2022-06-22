@@ -427,3 +427,11 @@ if __name__ == "__main__":
     Scrapper.upload_to_s3("raw_data/json/expression_details.json", "neuronalpromoters", "expression_details.json")
     Scrapper.upload_to_s3("raw_data/json/expression_details.json", "neuronalpromoters", "promoter_previews.json")
     Scrapper.upload_to_s3("raw_data/json/expression_details.json", "neuronalpromoters", "expression_details.json")
+
+    # upload data to postgresql
+    Scrapper.upload_data_to_RDS(
+        "postgresql", "psycopg2", "neuronalpromoters.cpjdqvkt7msy.us-east-1.rds.amazonaws.com", "postgres", "Ek2000ek", "5432", "neuronal_promoters", "raw_data/json/expression_details.json", "expression_details")
+    Scrapper.upload_data_to_RDS(
+        "postgresql", "psycopg2", "neuronalpromoters.cpjdqvkt7msy.us-east-1.rds.amazonaws.com", "postgres", "Ek2000ek", "5432", "neuronal_promoters", "raw_data/json/strain_info.json", "strain_info")
+    Scrapper.upload_data_to_RDS(
+        "postgresql", "psycopg2", "neuronalpromoters.cpjdqvkt7msy.us-east-1.rds.amazonaws.com", "postgres", "Ek2000ek", "5432", "neuronal_promoters", "raw_data/json/promoter_previews.json", "promoter_previews")
