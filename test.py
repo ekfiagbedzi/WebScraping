@@ -68,7 +68,13 @@ class ScrapperTestCase(unittest.TestCase):
         actual_value = type(scrapper.get_element_attribute(element, "href"))
         self.assertEqual(expected_value, actual_value)
     
+    def test_get_element_attribute_from_list(self):
+        scrapper = Scrapper("https://wormguides.org/")
+        expected_value = list
+        scrapper.load_webpage()
+        element = scrapper.find_elements(By.TAG_NAME, "script")
+        actual_value = type(scrapper.get_element_attribute_from_list(element, "type"))
+        self.assertEqual(expected_value, actual_value)
 
 
-
-unittest.main(argv=[''], verbosity=1, exit=False)
+unittest.main(argv=[''], verbosity=2, exit=False)
