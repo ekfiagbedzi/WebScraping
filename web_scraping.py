@@ -3,8 +3,12 @@ import json
 import urllib.request as req
 import json
 
+import pandas as pd
 import uuid
 import boto3
+from sqlalchemy import create_engine
+import psycopg2
+
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -262,6 +266,28 @@ class Scrapper:
         s3_client = boto3.client("s3")
         response = s3_client.upload_file(path_to_file, bucket_name, object_name)
         return response
+
+    @staticmethod
+    def upload_data_to_RDS(DATABASE_TYPE, DBAPI, ENDPOINT, USER, PASSWORD, PORT, DATABASE, path_to_file, table_name):
+        """Upload data to AWS RDS
+            Args:
+                DATABASE_TYPE (str): eg. postgresql, aurora
+                DBAPI (str): eg. psycopg
+                ENDPOINT (str): localhost or IP address of remote server
+                USER (str): Username of server owner
+                PASSWORD (str): PASSCODE
+                PORT (str): Connection Port default 5432
+                DATABASE (str): Database name
+                path_to_file (str): Link or Buffer to the file
+                table_name (str): Representative name for the table in the database
+            Return:
+                None
+        """
+        engine = create_engine(f"{DATABASE_TYPE}+{DBAPI}://{USER}:{PASSWORD}@{ENDPOINT}:{PORT}/{DATABASE}")
+        engine.connect()
+        DATA = pd.read_json(path_to_file)
+        DATA.to_sql(table_name, engine, if_exists="replace")
+
 
 
 if __name__ == "__main__":
