@@ -2,6 +2,7 @@ import re
 import json
 import urllib.request as req
 import json
+import os
 
 import pandas as pd
 import uuid
@@ -61,6 +62,7 @@ class Scrapper:
 
     # web driver
     driver = webdriver.Chrome(PATH)
+
     
     def __init__ (self, url: str) -> None:
         self.url = url
@@ -69,6 +71,7 @@ class Scrapper:
     def load_webpage(self) -> None:
         """Open the website of interest in browser"""
         self.driver.get(self.url)
+
 
     @classmethod
     def switch_driver(cls, PATH: str) -> None:
@@ -108,16 +111,19 @@ class Scrapper:
         element.send_keys(input_text)
         element.send_keys(Keys.RETURN)
 
+
     @classmethod
     def forward(cls) -> None:
         """Move to next cached page"""
         cls.driver.forward()
+
 
     @classmethod
     def back(cls) -> None:
         """Go back to previous cached page"""
         cls.driver.back()
     
+
     @staticmethod
     def get_element_attribute(element, attribute: str) -> object:
         """Find a particular attribute from an element
@@ -128,6 +134,7 @@ class Scrapper:
                 Attribute
         """
         return element.get_attribute(attribute) 
+
 
     def get_element_attribute_from_list(self, list: list, attribute: str) -> list:
         """Find a particular attribute from a list of elements
@@ -156,22 +163,11 @@ class Scrapper:
         try:
             element = WebDriverWait(self.driver, timeout).until(
                 EC.presence_of_element_located((by, value))) # wait till the element is found
-
         except:
             self.driver.quit()
 
         return element
 
-    @staticmethod
-    def find_element_from_element(parent_element, by, value):
-        """Find an element within another element
-           Args:
-                parent_element (selenium.WebElement): Element
-                value: Element tag
-           Return:
-                selenium.WebElement
-        """
-        return parent_element.find_element(by, value)
 
     def find_elements(self, by, value: str, attribute=None, timeout=10) -> list:
         """Find several similar elements by tags and/or attributes
@@ -188,12 +184,11 @@ class Scrapper:
         try:
             elements = WebDriverWait(self.driver, timeout).until(
                 EC.presence_of_all_elements_located((by, value))) # wait till the element is found
-
-
         except:
             self.driver.quit()
 
         return elements
+
 
     @staticmethod
     def extract_elements_from_list(list: list, by, value: str, attribute=None) -> list:
@@ -212,6 +207,7 @@ class Scrapper:
         links = [element.find_element(by, value) for element in list]
         return links
 
+
     @staticmethod
     def generate_uuids(num_of_ids):
         """Generate unique IDs for each promoter
@@ -222,8 +218,9 @@ class Scrapper:
         """
         return [str(uuid.uuid4()) for i in range(num_of_ids)]
 
+
     @staticmethod
-    def download_images(image_urls, file_path, uuids):
+    def download_image(image_url, file_path, unique_id):
         """Download associated images of each promoter
            Args:
             image_urls (list): Links to retrieve images
@@ -232,12 +229,11 @@ class Scrapper:
            Return:
             File paths of downloaded images (list)
         """
-        index_count = 0
-        for url in image_urls:
-            req.urlretrieve(url, "{}/{}_{}.gif".format(file_path, uuids[index_count], index_count))
-            index_count+=1
+        
+        req.urlretrieve(image_url, "{}{}.gif".format(file_path, unique_id))
 
-        return "{}/{}_{}.gif".format(file_path, uuids[index_count-1], index_count-1)
+        return "{}{}.gif".format(file_path, unique_id)
+
 
     @staticmethod
     def store_data_as_json(data_dict, file_path):
@@ -250,6 +246,7 @@ class Scrapper:
         """
         with open(file_path, "w") as f:
             json.dump(data_dict, f)
+
 
     @staticmethod
     def upload_to_s3(path_to_file, bucket_name=None, object_name=None):
@@ -266,6 +263,7 @@ class Scrapper:
         s3_client = boto3.client("s3")
         response = s3_client.upload_file(path_to_file, bucket_name, object_name)
         return response
+
 
     @staticmethod
     def upload_data_to_RDS(DATABASE_TYPE, DBAPI, ENDPOINT, USER, PASSWORD, PORT, DATABASE, path_to_file, table_name):
@@ -301,11 +299,50 @@ if __name__ == "__main__":
     worm_scrapper.click(By.XPATH, "http://promoters.wormguides.org/", attribute="href")
     worm_scrapper.search("*", By.NAME, "q")
 
+
     # get needed elements on results page
     promoter_previews = worm_scrapper.find_elements(By.CLASS_NAME, "result_body")
+    
+    
+    # get image_urls
+    image_tags = []
+    for element in promoter_previews:
+        try:
+            image_tags.append(element.find_element(By.TAG_NAME, "img"))
+        except:
+            image_tags.append("NA")
+            pass
+    print("image_tags:", image_tags)
+
+    image_urls = []
+    for tag in image_tags:
+        try:
+            image_urls.append(str(tag.get_attribute("src")))
+        except:
+            image_urls.append("NA")
+            pass
+    print("image_urls", image_urls)
+    
+
+    # generate uuids
+    uuids = Scrapper.generate_uuids(len(image_urls))
+
+    
+    # download images
+    index = -1
+    for url in image_urls:
+        index+=1
+        try:
+            Scrapper.download_image(url, "/home/biopythoncodepc/Documents/git_repositories/Data_Collection_Pipeline/raw_data/images/", uuids[index])
+        except:
+            pass
+    
+    
+    # get links to details pages
     promoter_details_links = worm_scrapper.find_elements(By.TAG_NAME, "span")
     expression_details_elements = worm_scrapper.extract_elements_from_list(promoter_details_links, By.TAG_NAME, "a")
     expression_details_links = worm_scrapper.get_element_attribute_from_list(expression_details_elements, "href") # list of links to all expression details pages
+
 
     # get promoter information
     gene_function = []
@@ -316,6 +353,7 @@ if __name__ == "__main__":
         gene_function.append(info[1].strip("\n"))
         spatial_expression_patterns.append(info[3].strip("\n"))
         cellular_expression_patterns.append(info[4].strip("\n"))
+
 
     # get expression details
     promoters = []
@@ -332,6 +370,7 @@ if __name__ == "__main__":
         promoters.append(info_list[0]) # promoter names
         begining.append(info_list[1]) # time of expression start
         termination.append(info_list[2]) # time of expression termination
+
 
     # get strain information
     strain_information = []
@@ -380,39 +419,7 @@ if __name__ == "__main__":
         vector.append(stripped[19])
         expressing_strains.append(stripped[-2])
 
-    # get image_urls
-    image_tags = []
-    for element in promoter_previews:
-        try:
-            image_tags.append(Scrapper.find_element_from_element(element, By.TAG_NAME, "img"))
 
-        except:
-            image_tags.append("NA")
-            pass
-    image_urls = []
-    for tag in image_tags:
-        try:
-            image_urls.append(str(tag.get_attribute("src")))
-
-        except:
-            image_urls.append("NA")
-            pass
-
-    
-
-    # generate uuids
-    uuids = Scrapper.generate_uuids(len(image_urls))
-
-    # download images
-    index = -1
-    for url in image_urls:
-        index+=1
-        try:
-            Scrapper.download_image(url, "/home/biopythoncodepc/Documents/git_repositories/Data_Collection_Pipeline/raw_data/images", uuids[index])
-        except:
-            pass
-
-    
     # store data as dictionaries
     promoter_previews_dict = dict(zip(["uuids", "gene_function", "spatial_expression_patterns", "cellular_expression_patterns", "image_urls"], [uuids, gene_function, spatial_expression_patterns, cellular_expression_patterns, image_urls]))
     expression_details = dict(zip(["uuids", "begining", "termination", "detailed_expression_patterns"], [uuids, begining, termination, detailed_expression_patterns]))
@@ -422,11 +429,6 @@ if __name__ == "__main__":
     Scrapper.store_data_as_json(promoter_previews_dict, "/home/biopythoncodepc/Documents/git_repositories/Data_Collection_Pipeline/raw_data/json/promoter_previews.json")
     Scrapper.store_data_as_json(expression_details, "/home/biopythoncodepc/Documents/git_repositories/Data_Collection_Pipeline/raw_data/json/expression_details.json")
     Scrapper.store_data_as_json(strain_info, "/home/biopythoncodepc/Documents/git_repositories/Data_Collection_Pipeline/raw_data/json/strain_info.json")
-    
-    # upload raw data to s3
-    Scrapper.upload_to_s3("raw_data/json/expression_details.json", "neuronalpromoters", "expression_details.json")
-    Scrapper.upload_to_s3("raw_data/json/expression_details.json", "neuronalpromoters", "promoter_previews.json")
-    Scrapper.upload_to_s3("raw_data/json/expression_details.json", "neuronalpromoters", "expression_details.json")
 
     # upload data to postgresql
     Scrapper.upload_data_to_RDS(
@@ -435,3 +437,16 @@ if __name__ == "__main__":
         "postgresql", "psycopg2", "neuronalpromoters.cpjdqvkt7msy.us-east-1.rds.amazonaws.com", "postgres", "Ek2000ek", "5432", "neuronal_promoters", "raw_data/json/strain_info.json", "strain_info")
     Scrapper.upload_data_to_RDS(
         "postgresql", "psycopg2", "neuronalpromoters.cpjdqvkt7msy.us-east-1.rds.amazonaws.com", "postgres", "Ek2000ek", "5432", "neuronal_promoters", "raw_data/json/promoter_previews.json", "promoter_previews")
+
+    
+    # upload raw data to s3
+    Scrapper.upload_to_s3("raw_data/json/expression_details.json", "neuronalpromoters", "expression_details.json")
+    Scrapper.upload_to_s3("raw_data/json/promoter_previews.json", "neuronalpromoters", "promoter_previews.json")
+    Scrapper.upload_to_s3("raw_data/json/strain_info.json", "neuronalpromoters", "strain_info.json")
+    
+    # upload images to AWS S3 bucket
+    image_list = os.listdir("raw_data/images")
+    print(image_list)
+    for i in image_list:
+        Scrapper.upload_to_s3("/home/biopythoncodepc/Documents/git_repositories/Data_Collection_Pipeline/raw_data/images/{}".format(i), "neuronalpromoterimages", i)
+
