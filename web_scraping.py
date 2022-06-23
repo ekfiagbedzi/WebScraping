@@ -16,6 +16,11 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.options import Options
+options = Options()
+options.add_argument("--headless") # run in headless mode
+options.add_argument("window-size=1920,1080") # ensure default selenium window size is used in headless mode
+
 
 # set path to chrome driver
 PATH = "/home/biopythoncodepc/Documents/chromedriver"
@@ -61,7 +66,7 @@ class Scrapper:
     """
 
     # web driver
-    driver = webdriver.Chrome(PATH)
+    driver = webdriver.Chrome(PATH, options=options)
 
     
     def __init__ (self, url: str) -> None:
