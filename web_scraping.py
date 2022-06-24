@@ -438,11 +438,11 @@ if __name__ == "__main__":
 
     # upload data to postgresql
     Scrapper.upload_data_to_RDS(
-        "postgresql", "psycopg2", "neuronalpromoters.cpjdqvkt7msy.us-east-1.rds.amazonaws.com", "postgres", "Ek2000ek", "5432", "neuronal_promoters", "raw_data/json/expression_details.json", "expression_details")
+        "postgresql", "psycopg2", "neuronalpromoters.cpjdqvkt7msy.us-east-1.rds.amazonaws.com", "postgres", "<PASSWORD>", "5432", "neuronal_promoters", "raw_data/json/expression_details.json", "expression_details")
     Scrapper.upload_data_to_RDS(
-        "postgresql", "psycopg2", "neuronalpromoters.cpjdqvkt7msy.us-east-1.rds.amazonaws.com", "postgres", "Ek2000ek", "5432", "neuronal_promoters", "raw_data/json/strain_info.json", "strain_info")
+        "postgresql", "psycopg2", "neuronalpromoters.cpjdqvkt7msy.us-east-1.rds.amazonaws.com", "postgres", "<PASSWORD>", "5432", "neuronal_promoters", "raw_data/json/strain_info.json", "strain_info")
     Scrapper.upload_data_to_RDS(
-        "postgresql", "psycopg2", "neuronalpromoters.cpjdqvkt7msy.us-east-1.rds.amazonaws.com", "postgres", "Ek2000ek", "5432", "neuronal_promoters", "raw_data/json/promoter_previews.json", "promoter_previews")
+        "postgresql", "psycopg2", "neuronalpromoters.cpjdqvkt7msy.us-east-1.rds.amazonaws.com", "postgres", "<PASSWORD>", "5432", "neuronal_promoters", "raw_data/json/promoter_previews.json", "promoter_previews")
 
     
     # upload raw data to s3
