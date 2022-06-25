@@ -17,13 +17,15 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
+
+
 options = Options()
 options.add_argument("--headless") # run in headless mode
 options.add_argument("window-size=1920,1080") # ensure default selenium window size is used in headless mode
 
 
 # set path to chrome driver
-PATH = "/home/biopythoncodepc/Documents/chromedriver"
+PATH = input("Enter path to chromedriver")
 
 class Scrapper:
     """Wraps all essential web _scraping funcitons into a single object
@@ -438,11 +440,11 @@ if __name__ == "__main__":
 
     # upload data to postgresql
     Scrapper.upload_data_to_RDS(
-        "postgresql", "psycopg2", "neuronalpromoters.cpjdqvkt7msy.us-east-1.rds.amazonaws.com", "postgres", "<PASSWORD>", "5432", "neuronal_promoters", "raw_data/json/expression_details.json", "expression_details")
+        "postgresql", "psycopg2", "neuronalpromoters.cpjdqvkt7msy.us-east-1.rds.amazonaws.com", "postgres", input("Enter your postgres password"), "5432", "neuronal_promoters", "raw_data/json/expression_details.json", "expression_details")
     Scrapper.upload_data_to_RDS(
-        "postgresql", "psycopg2", "neuronalpromoters.cpjdqvkt7msy.us-east-1.rds.amazonaws.com", "postgres", "<PASSWORD>", "5432", "neuronal_promoters", "raw_data/json/strain_info.json", "strain_info")
+        "postgresql", "psycopg2", "neuronalpromoters.cpjdqvkt7msy.us-east-1.rds.amazonaws.com", "postgres", input("Enter your postgres password"), "5432", "neuronal_promoters", "raw_data/json/strain_info.json", "strain_info")
     Scrapper.upload_data_to_RDS(
-        "postgresql", "psycopg2", "neuronalpromoters.cpjdqvkt7msy.us-east-1.rds.amazonaws.com", "postgres", "<PASSWORD>", "5432", "neuronal_promoters", "raw_data/json/promoter_previews.json", "promoter_previews")
+        "postgresql", "psycopg2", "neuronalpromoters.cpjdqvkt7msy.us-east-1.rds.amazonaws.com", "postgres", input("Enter your postgres password"), "5432", "neuronal_promoters", "raw_data/json/promoter_previews.json", "promoter_previews")
 
     
     # upload raw data to s3
