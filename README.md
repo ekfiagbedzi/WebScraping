@@ -37,3 +37,14 @@ name, gene function, temporal and spatial expression details, strain and plasmid
 The JSON file was then dumped into a public AWS S3 bucket with the link
 Image data was dumped into a public AWS S3 bucket
 A SQL database was then created and stored in postgresql database using AWS RDS server
+
+## Docekr in headless mode
+The code has been made to run in headless mode by adding an argument `("--headless")` to the driver options
+This eliminates issues such as website "slowness" and allows the code too run in the background
+
+## Running the scrapper in a docker container
+A docker image was created for the scrapper. To access it,
+`docker pull emmacode/neuronal_promoters:v1`
+
+To run the application
+`docker run -v ~/.aws/:/root/.aws:ro -it emmacode/neuronal_promoters:v1`
