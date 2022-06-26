@@ -48,3 +48,6 @@ A docker image was created for the scrapper. To access it,
 
 To run the application
 `docker run -v ~/.aws/:/root/.aws:ro -it emmacode/neuronal_promoters:v1`
+
+## Running the docker container on an EC2 instance.
+I also set up an EC2 instance and tested this scrapper on it and it run without issues
