@@ -54,3 +54,4 @@ I also set up an EC2 instance and tested this scrapper on it and it run without 
 
 ## Monitoring metrics of a docker
 I monitored the metrics of a docker container I ran on an EC2 instance
+The monitoring was done using promethus 
