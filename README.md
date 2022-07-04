@@ -50,8 +50,10 @@ To run the application
 `docker run -v ~/.aws/:/root/.aws:ro -it emmacode/neuronal_promoters:v1`
 
 ## Running the docker container on an EC2 instance.
-I also set up an EC2 instance and tested this scrapper on it and it run without issues
+I also set up an EC2 instance and tested this scrapper on it and it run without issues. 
+In the EC2 instance on the command line, I run 
+`sudo docker run -v ~/.aws/:/root/.aws:ro -it emmacode/neuronal_promoters:v1` after pulling the docker image from Dockerhub
 
 ## Monitoring metrics of a docker
 I monitored the metrics of a docker container I ran on an EC2 instance
-The monitoring was done using promethus 
+The monitoring was done using promethus. 
