@@ -38,7 +38,7 @@ The JSON file was then dumped into a public AWS S3 bucket with the link
 Image data was dumped into a public AWS S3 bucket
 A SQL database was then created and stored in postgresql database using AWS RDS server
 
-## Docekr in headless mode
+## Docker in headless mode
 The code has been made to run in headless mode by adding an argument `("--headless")` to the driver options
 This eliminates issues such as website "slowness" and allows the code too run in the background
 
@@ -50,4 +50,10 @@ To run the application
 `docker run -v ~/.aws/:/root/.aws:ro -it emmacode/neuronal_promoters:v1`
 
 ## Running the docker container on an EC2 instance.
-I also set up an EC2 instance and tested this scrapper on it and it run without issues
+I also set up an EC2 instance and tested this scrapper on it and it run without issues. 
+In the EC2 instance on the command line, I run 
+`sudo docker run -v ~/.aws/:/root/.aws:ro -it emmacode/neuronal_promoters:v1` after pulling the docker image from Dockerhub
+
+## Monitoring metrics of a docker
+I monitored the metrics of a docker container I ran on an EC2 instance
+The monitoring was done using promethus. 
