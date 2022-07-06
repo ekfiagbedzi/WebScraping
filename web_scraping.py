@@ -9,6 +9,7 @@ import uuid
 import boto3
 from sqlalchemy import create_engine
 import psycopg2
+from decouple import config
 
 
 from selenium import webdriver
@@ -22,10 +23,25 @@ from selenium.webdriver.chrome.options import Options
 options = Options()
 options.add_argument("--headless") # run in headless mode
 options.add_argument("window-size=1920,1080") # ensure default selenium window size is used in headless mode
+options.add_argument("--disable-gpu")
+options.add_argument("--disable-extensions")
+options.add_argument("--disable-infobars")
+options.add_argument("--start-maximized")
+options.add_argument("--disable-notifications")
+options.add_argument('--no-sandbox')
+options.add_argument('--disable-dev-shm-usage')
 
+# variables for upload to postgresql
+DATABASE_TYPE = config("DATABASE_TYPE")
+DBAPI = config("DBAPI")
+ENDPOINT = config("ENDPOINT")
+USER = config("USER")
+PASSWORD = config("PASSWORD")
+PORT = config("PORT")
+DATABASE = config("DATABASE")
 
 # set path to chrome driver
-PATH = input("Enter path to chromedriver")
+PATH = "/usr/local/bin/chromedriver"
 
 class Scrapper:
     """Wraps all essential web _scraping funcitons into a single object
@@ -299,20 +315,21 @@ class Scrapper:
 
 if __name__ == "__main__":
     
-
+    print("Loading web driver")
     # navigate to results page
     worm_scrapper = Scrapper(url="https://wormguides.org/")
+    print("Navigating to results page")
     worm_scrapper.load_webpage()
     worm_scrapper.click(By.XPATH, "https://wormguides.org/resources/", "href")
     worm_scrapper.click(By.XPATH, "Neuron-Specific Marker Genes", attribute="title")
     worm_scrapper.click(By.XPATH, "http://promoters.wormguides.org/", attribute="href")
     worm_scrapper.search("*", By.NAME, "q")
 
-
+    print("Getting promoter preview info")
     # get needed elements on results page
     promoter_previews = worm_scrapper.find_elements(By.CLASS_NAME, "result_body")
     
-    
+    print("Getting image urls")
     # get image_urls
     image_tags = []
     for element in promoter_previews:
@@ -330,27 +347,27 @@ if __name__ == "__main__":
             image_urls.append("NA")
             pass
     
-
+    print("Generating UUIDS")
     # generate uuids
     uuids = Scrapper.generate_uuids(len(image_urls))
 
-    
+    print("Downloading Images")
     # download images
     index = -1
     for url in image_urls:
         index+=1
         try:
-            Scrapper.download_image(url, "/home/biopythoncodepc/Documents/git_repositories/Data_Collection_Pipeline/raw_data/images/", uuids[index])
+            Scrapper.download_image(url, "raw_data/images/", uuids[index])
         except ValueError:
             pass
     
-    
+    print("Geting links to all detail pages")
     # get links to details pages
     promoter_details_links = worm_scrapper.find_elements(By.TAG_NAME, "span")
     expression_details_elements = worm_scrapper.extract_elements_from_list(promoter_details_links, By.TAG_NAME, "a")
     expression_details_links = worm_scrapper.get_element_attribute_from_list(expression_details_elements, "href") # list of links to all expression details pages
 
-
+    print("Getting promoter information")
     # get promoter information
     gene_function = []
     spatial_expression_patterns = []
@@ -361,7 +378,7 @@ if __name__ == "__main__":
         spatial_expression_patterns.append(info[3].strip("\n"))
         cellular_expression_patterns.append(info[4].strip("\n"))
 
-
+    print("Getting expression details")
     # get expression details
     promoters = []
     begining = []
@@ -378,7 +395,7 @@ if __name__ == "__main__":
         begining.append(info_list[1]) # time of expression start
         termination.append(info_list[2]) # time of expression termination
 
-
+    print("Getting strain info")
     # get strain information
     strain_information = []
     strain_name = []
@@ -426,7 +443,7 @@ if __name__ == "__main__":
         vector.append(stripped[19])
         expressing_strains.append(stripped[-2])
 
-
+    print("Storing data as JSON")
     # store data as dictionaries
     promoter_previews_dict = dict(zip(["uuids", "gene_function", "spatial_expression_patterns", "cellular_expression_patterns", "image_urls"], [uuids, gene_function, spatial_expression_patterns, cellular_expression_patterns, image_urls]))
     expression_details = dict(zip(["uuids", "begining", "termination", "detailed_expression_patterns"], [uuids, begining, termination, detailed_expression_patterns]))
@@ -434,27 +451,35 @@ if __name__ == "__main__":
 
 
     # dump data in json files
-    Scrapper.store_data_as_json(promoter_previews_dict, "/home/biopythoncodepc/Documents/git_repositories/Data_Collection_Pipeline/raw_data/json/promoter_previews.json")
-    Scrapper.store_data_as_json(expression_details, "/home/biopythoncodepc/Documents/git_repositories/Data_Collection_Pipeline/raw_data/json/expression_details.json")
-    Scrapper.store_data_as_json(strain_info, "/home/biopythoncodepc/Documents/git_repositories/Data_Collection_Pipeline/raw_data/json/strain_info.json")
+    Scrapper.store_data_as_json(promoter_previews_dict, "raw_data/json/promoter_previews.json")
+    Scrapper.store_data_as_json(expression_details, "raw_data/json/expression_details.json")
+    Scrapper.store_data_as_json(strain_info, "raw_data/json/strain_info.json")
 
+
+    
+    print("Uploading data to RDS database")
     # upload data to postgresql
     Scrapper.upload_data_to_RDS(
-        "postgresql", "psycopg2", "neuronalpromoters.cpjdqvkt7msy.us-east-1.rds.amazonaws.com", "postgres", input("Enter your postgres password"), "5432", "neuronal_promoters", "raw_data/json/expression_details.json", "expression_details")
+        DATABASE_TYPE, DBAPI, ENDPOINT, USER, PASSWORD, PORT, DATABASE, "raw_data/json/expression_details.json", "expression_details")
     Scrapper.upload_data_to_RDS(
-        "postgresql", "psycopg2", "neuronalpromoters.cpjdqvkt7msy.us-east-1.rds.amazonaws.com", "postgres", input("Enter your postgres password"), "5432", "neuronal_promoters", "raw_data/json/strain_info.json", "strain_info")
+        DATABASE_TYPE, DBAPI, ENDPOINT, USER, PASSWORD, PORT, DATABASE, "raw_data/json/strain_info.json", "strain_info")
     Scrapper.upload_data_to_RDS(
-        "postgresql", "psycopg2", "neuronalpromoters.cpjdqvkt7msy.us-east-1.rds.amazonaws.com", "postgres", input("Enter your postgres password"), "5432", "neuronal_promoters", "raw_data/json/promoter_previews.json", "promoter_previews")
+        DATABASE_TYPE, DBAPI, ENDPOINT, USER, PASSWORD, PORT, DATABASE, "raw_data/json/promoter_previews.json", "promoter_previews")
 
-    
+    BUCKET = config("BUCKET")
+    print("Uploading json data to AWS S3 bucket")
     # upload raw data to s3
-    Scrapper.upload_to_s3("raw_data/json/expression_details.json", "neuronalpromoters", "expression_details.json")
-    Scrapper.upload_to_s3("raw_data/json/promoter_previews.json", "neuronalpromoters", "promoter_previews.json")
-    Scrapper.upload_to_s3("raw_data/json/strain_info.json", "neuronalpromoters", "strain_info.json")
+    Scrapper.upload_to_s3("raw_data/json/expression_details.json", BUCKET, "expression_details.json")
+    print("Uploading expression_details to S3")
+    Scrapper.upload_to_s3("raw_data/json/promoter_previews.json", BUCKET, "promoter_previews.json")
+    print("Uploading promoter_previews to S3")
+    Scrapper.upload_to_s3("raw_data/json/strain_info.json", BUCKET, "strain_info.json")
+    print("Uploading strain_info to S3")
     
-
+    print("Uploading images to AWS S3 bucket")
     # upload images to AWS S3 bucket
     image_list = os.listdir("raw_data/images")
     for i in image_list:
-        Scrapper.upload_to_s3("/home/biopythoncodepc/Documents/git_repositories/Data_Collection_Pipeline/raw_data/images/{}".format(i), "neuronalpromoterimages", i)
+        Scrapper.upload_to_s3("raw_data/images/{}".format(i), "neuronalpromoterimages", i)
 
+    print("Website Scrapped succesfully!!!")
