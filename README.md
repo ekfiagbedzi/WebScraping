@@ -51,9 +51,18 @@ To run the application
 
 ## Running the docker container on an EC2 instance.
 I also set up an EC2 instance and tested this scrapper on it and it run without issues. 
-In the EC2 instance on the command line, I run 
+In the EC2 instance on the command line, I run
 `sudo docker run -v ~/.aws/:/root/.aws:ro -it emmacode/neuronal_promoters:v1` after pulling the docker image from Dockerhub
 
 ## Monitoring metrics of a docker
 I monitored the metrics of a docker container I ran on an EC2 instance
-The monitoring was done using promethus. 
+The monitoring was done using promethus.
+First I created a /etc/docker/daemon.json file,
+
+I run 
+`sudo docker run --rm -d     --network=host     --name prometheus    -v /home/biopythoncodepc/Documents/docker_repositories/Data_Collection_Pipeline/prometheus.yml:/etc/prometheus/prometheus.yml     prom/prometheus     --config.file=/etc/prometheus/prometheus.yml     --web.enable-lifecycle` to start a prometheus job, then
+
+`docker run -v ~/.aws/:/root/.aws:ro -it wormscrapper`
+
+To access promethus, I first added the private IP address of my EC2 instance to a secutrity group, and then accessed prometheus by running 
+`ip_address:9090` in my browser
