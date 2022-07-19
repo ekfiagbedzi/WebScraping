@@ -8,6 +8,9 @@ on:
       - "main"
     tags:
       - "v*"
+  pull_request:
+    branches:
+      - "main"
       
 # jobs to run after event is triggered
 # job1
