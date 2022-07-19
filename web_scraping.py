@@ -482,4 +482,4 @@ if __name__ == "__main__":
     for i in image_list:
         Scrapper.upload_to_s3("raw_data/images/{}".format(i), "neuronalpromoterimages", i)
 
-    print("Website Scrapped succesfully!!!")
+    print("Website Scrapped Succesfully!!!")
