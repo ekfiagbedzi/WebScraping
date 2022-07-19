@@ -25,8 +25,6 @@ jobs:
           name: setup environment variables
           env:
             DATABASE_TYPE: ${{ secrets.DATABASE_TYPE }}
-          run: |
-            nbdev_test_nbs
       
       # step1: checkout repository under $GITHUB_WORKSPACE, so our workflow can access it
         -
