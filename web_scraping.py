@@ -33,7 +33,7 @@ options.add_argument('--disable-dev-shm-usage')
 
 # variables for upload to postgresql
 #DATABASE_TYPE = config("DATABASE_TYPE")
-DATABASE_TYPE = os.environ["DATABASE_TYPE"]
+DATABASE_TYPE = ${{ secrets.DATABASE_TYPE }}
 DBAPI = config("DBAPI")
 ENDPOINT = config("ENDPOINT")
 USER = config("USER")
