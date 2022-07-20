@@ -33,13 +33,19 @@ options.add_argument('--disable-dev-shm-usage')
 
 # variables for upload to postgresql
 #DATABASE_TYPE = config("DATABASE_TYPE")
-DATABASE_TYPE = !${{ secrets.DATABASE_TYPE }}
-DBAPI = config("DBAPI")
-ENDPOINT = config("ENDPOINT")
-USER = config("USER")
-PASSWORD = config("PASSWORD")
-PORT = config("PORT")
-DATABASE = config("DATABASE")
+#DBAPI = config("DBAPI")
+#ENDPOINT = config("ENDPOINT")
+#USER = config("USER")
+#PASSWORD = config("PASSWORD")
+#PORT = config("PORT")
+#DATABASE = config("DATABASE")
+DATABASE_TYPE = os.environ["DATABASE_TYPE"]
+DBAPI = os.environ["DBAPI"]
+ENDPOINT = os.environ["ENDPOINT"]
+USER = os.environ["USER"]
+PASSWORD = os.environ["PASSWORD"]
+PORT = os.environ["PORT"]
+DATABASE = os.environ["DATABASE"]
 
 # set path to chrome driver
 PATH = "/usr/local/bin/chromedriver"
