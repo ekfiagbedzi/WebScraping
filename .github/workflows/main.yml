@@ -25,7 +25,8 @@ jobs:
           name: setup environment variables
           env:
             DATABASE_TYPE: ${{ secrets.DATABASE_TYPE }}
-          run: echo good
+          run: |
+            python ~/web_scraping.py
       
       # step1: checkout repository under $GITHUB_WORKSPACE, so our workflow can access it
         -
