@@ -66,3 +66,9 @@ I run
 
 To access promethus, I first added the private IP address of my EC2 instance to a secutrity group, and then accessed prometheus by running 
 `ip_address:9090` in my browser
+
+## Set up a CI/CD pipeline for the Docker Image
+I set up a CI/CD pipeline using GitHub Actions and GitHub Secrets to automatically push a new image to DockerHub anytime I make changes to my scrapper.
+I used GitHub Secrets to pass login information to Docker Hub to avoid commiting such sensitive information to the repo.
+I used BuildX in the pipeline to build and push a new image to DockerHub
+I implemented a caching command in the pipeline to speed up the build and push process of small changes
