@@ -21,6 +21,7 @@ from selenium.webdriver.chrome.options import Options
 
 # create folder to store images
 os.mkdir("raw_data/images/")
+os.mkdir("raw_data/json/")
 
 options = Options()
 options.add_argument("--headless") # run in headless mode
