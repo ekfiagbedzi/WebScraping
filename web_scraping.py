@@ -58,6 +58,8 @@ BUCKET = os.environ["BUCKET"]
 #PORT = ${PORT}
 #BUCKET = ${BUCKET}
 print(DATABASE)
+AAA = "AAA"
+print(AAA)
 
 # set path to chrome driver
 PATH = "/usr/local/bin/chromedriver"
