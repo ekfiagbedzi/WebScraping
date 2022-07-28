@@ -34,36 +34,18 @@ options.add_argument('--no-sandbox')
 options.add_argument('--disable-dev-shm-usage')
 
 # variables for upload to postgresql
-#DATABASE_TYPE = config("DATABASE_TYPE")
-#DBAPI = config("DBAPI")
-#ENDPOINT = config("ENDPOINT")
-#USER = config("USER")
-#PASSWORD = config("PASSWORD")
-#PORT = config("PORT")
-#DATABASE = config("DATABASE")
 DATABASE_TYPE = os.environ["DATABASE_TYPE"]
 DBAPI = os.environ["DBAPI"]
 ENDPOINT = os.environ["ENDPOINT"]
 USER = os.environ["USER"]
 PASSWORD = os.environ["PASSWORD"]
 PORT = os.environ["PORT"]
-DATABASE = str(os.environ["DATABASE"])
-DATABASE2 = (os.environ["DATABASE"]).strip(")
+DATABASE = os.environ["DATABASE"]
 BUCKET = os.environ["BUCKET"]
-#DATABASE = config("DATABASE")
-#DATABASE_TYPE = ${DATABASE_TYPE}
-#DBAPI = ${DBAPI}
-#ENDPOINT = ${ENDPOINT}
-#USER = ${USER}
-#PASSWORD = ${PASSWORD}
-#PORT = ${PORT}
-#BUCKET = ${BUCKET}
-print(DATABASE)
-print(DATABASE2)
-AAA = "AAA"
-print(AAA)
-#engine = create_engine(f"{DATABASE_TYPE}+{DBAPI}://{USER}:{PASSWORD}@{ENDPOINT}:{PORT}/{DATABASE}")
-#engine.connect()
+
+engine = create_engine(f"{DATABASE_TYPE}+{DBAPI}://{USER}:{PASSWORD}@{ENDPOINT}:{PORT}/{DATABASE}")
+print(engine)
+engine.connect()
 
 # set path to chrome driver
 PATH = "/usr/local/bin/chromedriver"
