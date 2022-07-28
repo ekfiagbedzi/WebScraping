@@ -20,7 +20,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 
 # create folder to store images
-os.mkdir("rawdata/images/")
+os.mkdir("raw_data/images/")
 
 options = Options()
 options.add_argument("--headless") # run in headless mode
