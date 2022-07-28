@@ -48,6 +48,7 @@ USER = os.environ["USER"]
 PASSWORD = os.environ["PASSWORD"]
 PORT = os.environ["PORT"]
 DATABASE = os.environ["DATABASE"]
+BUCKET = os.environ["BUCKET"]
 #DATABASE = config("DATABASE")
 #DATABASE_TYPE = ${DATABASE_TYPE}
 #DBAPI = ${DBAPI}
@@ -56,7 +57,7 @@ DATABASE = os.environ["DATABASE"]
 #PASSWORD = ${PASSWORD}
 #PORT = ${PORT}
 #BUCKET = ${BUCKET}
-print(DATABASE, DATABASE_TYPE, DBAPI, USER, PASSWORD, PORT)
+print(DATABASE)
 
 # set path to chrome driver
 PATH = "/usr/local/bin/chromedriver"
