@@ -3,3 +3,6 @@ __pycache__/
 boto3_kit.ipynb
 test_data.csv
 check.py
+prometheus.yml
+.gitignore
+daemon.json
