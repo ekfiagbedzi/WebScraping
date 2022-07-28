@@ -20,8 +20,8 @@ from selenium.webdriver.chrome.options import Options
 
 
 # create folder to store images
-os.mkdir("raw_data/images/")
-os.mkdir("raw_data/json/")
+os.mkdir("/raw_data/images/")
+os.mkdir("/raw_data/json/")
 
 
 options = Options()
