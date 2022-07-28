@@ -20,7 +20,7 @@ from selenium.webdriver.chrome.options import Options
 
 
 # create folder to store json files
-os.mkdir("raw_data/json/")
+os.mkdir("raw_data/images/")
 
 
 options = Options()
