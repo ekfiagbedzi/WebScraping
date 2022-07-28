@@ -9,7 +9,6 @@ import uuid
 import boto3
 from sqlalchemy import create_engine
 import psycopg2
-from decouple import config
 
 
 from selenium import webdriver
@@ -19,9 +18,11 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 
+
 # create folder to store images
 os.mkdir("raw_data/images/")
 os.mkdir("raw_data/json/")
+
 
 options = Options()
 options.add_argument("--headless") # run in headless mode
@@ -34,6 +35,7 @@ options.add_argument("--disable-notifications")
 options.add_argument('--no-sandbox')
 options.add_argument('--disable-dev-shm-usage')
 
+
 # variables for upload to postgresql
 DATABASE_TYPE = os.environ["DATABASE_TYPE"]
 DBAPI = os.environ["DBAPI"]
@@ -44,9 +46,6 @@ PORT = os.environ["PORT"]
 DATABASE = os.environ["DATABASE"]
 BUCKET = os.environ["BUCKET"]
 
-engine = create_engine(f"{DATABASE_TYPE}+{DBAPI}://{USER}:{PASSWORD}@{ENDPOINT}:{PORT}/{DATABASE}")
-print(engine)
-engine.connect()
 
 # set path to chrome driver
 PATH = "/usr/local/bin/chromedriver"
@@ -474,7 +473,7 @@ if __name__ == "__main__":
     Scrapper.upload_data_to_RDS(
         DATABASE_TYPE, DBAPI, ENDPOINT, USER, PASSWORD, PORT, DATABASE, "raw_data/json/promoter_previews.json", "promoter_previews")
 
-    BUCKET = config("BUCKET")
+
     print("Uploading json data to AWS S3 bucket")
     # upload raw data to s3
     Scrapper.upload_to_s3("raw_data/json/expression_details.json", BUCKET, "expression_details.json")
