@@ -47,7 +47,8 @@ ENDPOINT = os.environ["ENDPOINT"]
 USER = os.environ["USER"]
 PASSWORD = os.environ["PASSWORD"]
 PORT = os.environ["PORT"]
-DATABASE = os.environ["DATABASE"]
+DATABASE = str(os.environ["DATABASE"])
+DATABASE2 = (os.environ["DATABASE"]).strip(")
 BUCKET = os.environ["BUCKET"]
 #DATABASE = config("DATABASE")
 #DATABASE_TYPE = ${DATABASE_TYPE}
@@ -58,10 +59,11 @@ BUCKET = os.environ["BUCKET"]
 #PORT = ${PORT}
 #BUCKET = ${BUCKET}
 print(DATABASE)
+print(DATABASE2)
 AAA = "AAA"
 print(AAA)
-engine = create_engine(f"{DATABASE_TYPE}+{DBAPI}://{USER}:{PASSWORD}@{ENDPOINT}:{PORT}/{DATABASE}")
-engine.connect()
+#engine = create_engine(f"{DATABASE_TYPE}+{DBAPI}://{USER}:{PASSWORD}@{ENDPOINT}:{PORT}/{DATABASE}")
+#engine.connect()
 
 # set path to chrome driver
 PATH = "/usr/local/bin/chromedriver"
