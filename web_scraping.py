@@ -48,6 +48,15 @@ options.add_argument('--disable-dev-shm-usage')
 #PASSWORD = os.environ["PASSWORD"]
 #PORT = os.environ["PORT"]
 #DATABASE = os.environ["DATABASE"]
+#DATABASE = config("DATABASE")
+DATABASE_TYPE = ${DATABASE_TYPE}
+DBAPI = ${DBAPI}
+ENDPOINT = ${ENDPOINT}
+USER = ${USER}
+PASSWORD = ${PASSWORD}
+PORT = ${PORT}
+BUCKET = ${BUCKET}
+print(DATABASE, DATABASE_TYPE, DBAPI, USER, PASSWORD, PORT)
 
 # set path to chrome driver
 PATH = "/usr/local/bin/chromedriver"
