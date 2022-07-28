@@ -60,6 +60,8 @@ BUCKET = os.environ["BUCKET"]
 print(DATABASE)
 AAA = "AAA"
 print(AAA)
+engine = create_engine(f"{DATABASE_TYPE}+{DBAPI}://{USER}:{PASSWORD}@{ENDPOINT}:{PORT}/{DATABASE}")
+engine.connect()
 
 # set path to chrome driver
 PATH = "/usr/local/bin/chromedriver"
