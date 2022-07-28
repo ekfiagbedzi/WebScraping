@@ -19,9 +19,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 
 
-# create folder to store images
-os.mkdir("~/raw_data/images/")
-os.mkdir("~/raw_data/json/")
+# create folder to store json files
+os.mkdir("raw_data/json/")
 
 
 options = Options()
