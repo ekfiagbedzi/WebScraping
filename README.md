@@ -52,7 +52,7 @@ To run the application
 ## Running the docker container on an EC2 instance.
 I also set up an EC2 instance and tested this scrapper on it and it run without issues. 
 In the EC2 instance on the command line, I run
-`sudo docker run -v ~/.aws/:/root/.aws:ro -it emmacode/neuronal_promoters:v1` after pulling the docker image from Dockerhub
+`sudo docker run -v ~/.aws/:/root/.aws:ro --envfile `crendential_files` -it emmacode/neuronal_promoters:v1` after pulling the docker image from Dockerhub
 
 ## Monitoring metrics of a docker
 I monitored the metrics of a docker container I ran on an EC2 instance
@@ -72,3 +72,7 @@ I set up a CI/CD pipeline using GitHub Actions and GitHub Secrets to automatical
 I used GitHub Secrets to pass login information to Docker Hub to avoid commiting such sensitive information to the repo.
 I used BuildX in the pipeline to build and push a new image to DockerHub
 I implemented a caching command in the pipeline to speed up the build and push process of small changes
+
+
+## Restart Scrapper everyday
+I set up a cronjob on an EC2 instance to pull the latest version of my scrapper from docker hub and run it
