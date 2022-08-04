@@ -21,7 +21,7 @@ PASSWORD = os.environ["PASSWORD"]
 PORT = os.environ["PORT"]
 DATABASE = os.environ["DATABASE"]
 BUCKET = os.environ["BUCKET"]
-
+os.mkdir("raw_data/images")
 
 if __name__ == "__main__":
     

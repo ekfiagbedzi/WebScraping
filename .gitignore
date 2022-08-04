@@ -6,4 +6,3 @@ prometheus.yml
 daemon.json
 .github
 .env
-raw_data/images/*.gif
