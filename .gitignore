@@ -3,5 +3,7 @@ boto3_kit.ipynb
 test_data.csv
 check.py
 prometheus.yml
-.gitignore
 daemon.json
+.github
+.env
+raw_data/images/*.gif
