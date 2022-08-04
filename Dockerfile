@@ -24,4 +24,4 @@ COPY . .
 
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
-CMD ["python", "web_scraping.py"]
+CMD ["python", "main.py"]
