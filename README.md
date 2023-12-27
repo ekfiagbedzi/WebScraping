@@ -1,4 +1,4 @@
-# WebScraping
+# Worm Promoter Data Centralisation
 ## Overview
 This project involves creating a `Scrapper` class that can be used to extract information from websites. It includes methods such as `click`, `search`, `accept_all_cookies` etc. which are normally needed to scrape and navigate a website. 
 
